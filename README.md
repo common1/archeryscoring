@@ -12,10 +12,12 @@ pip install wagtail
 wagtail start scoring .
 ```
 
-## Chapter 001 - Users app created
+## Chapter 002 - Users app created
 
 ```bash
+# Create users app
 python manage.py startapp users
+# Add users app to INSTALLED_APPS in base.py
 # Create User model in users.models.py
 python manage.py makemigrations
 python manage.py migrate
@@ -23,5 +25,18 @@ python manage.py createsuperuser
 Username: admin
 Email address: me@admin.com
 Password: changeme
+```
+
+## Chapter 003 - api app created
+
+```bash
+# Create api app
+python manage.py startapp api
+# Add api app to INSTALLED_APPS in base.py
+```
+
+# Chapter 004 - Implementation of BaseModel in api/models.py
+
+```bash
 ```
 
