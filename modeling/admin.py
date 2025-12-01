@@ -13,7 +13,7 @@ class ArcherAdmin(admin.ModelAdmin):
     ordering = ('last_name', 'first_name')
     fieldsets = (
         (None, {
-            'fields': ('first_name', 'middle_name', 'last_name', )
+            'fields': ( 'union_number', 'first_name', 'middle_name', 'last_name',)
         }),
         ('Contact Information', {
             'classes': ['collapse'],
@@ -21,7 +21,7 @@ class ArcherAdmin(admin.ModelAdmin):
         }),
         ('Extra Information', {
             'classes': ['collapse'],
-            'fields': ('birth_date',),
+            'fields': ('birth_date', 'info'),
         }),
     )
     search_fields = ('last_name', 'first_name', 'middle_name')
