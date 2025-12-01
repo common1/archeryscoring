@@ -35,8 +35,10 @@ python manage.py startapp api
 # Add api app to INSTALLED_APPS in base.py
 ```
 
-# Chapter 004 - Implementation of BaseModel in api/models.py
+# Chapter 004 - Implementation of BaseModel and ArcherModel in api/models.py
 
 ```bash
+python manage.py makemigrations
+python manage.py migrate
 ```
 
