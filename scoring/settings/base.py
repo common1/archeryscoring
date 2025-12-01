@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     # Extensions
     "users",
     "api",
+    "wagtail_modeladmin",
+    "modeling",
 ]
 
 MIDDLEWARE = [

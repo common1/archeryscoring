@@ -35,10 +35,19 @@ python manage.py startapp api
 # Add api app to INSTALLED_APPS in base.py
 ```
 
-# Chapter 004 - Implementation of BaseModel and ArcherModel in api/models.py
+## Chapter 004 - Implementation of BaseModel and ArcherModel in api/models.py
+
+[https://wagtail-modeladmin.readthedocs.io/en/latest/usage.html]
+[https://docs.wagtail.org/en/latest/advanced_topics/icons.html]
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
+pip install wagtail-modeladmin
+```
+
+## Chapter 005 - Create app modeling with models BaseModel, Archer, Clubs, ClubMembership
+
+```bash
 ```
 
