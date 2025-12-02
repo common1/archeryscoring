@@ -7,21 +7,21 @@ from .models import (
 
 @admin.register(Archer)
 class ArcherAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'middle_name')
+    list_display = ('union_number', 'last_name', 'first_name', 'middle_name')
     list_display_links = ('last_name', 'first_name')
     list_per_page = 20
     ordering = ('last_name', 'first_name')
     fieldsets = (
         (None, {
-            'fields': ( 'union_number', 'first_name', 'middle_name', 'last_name',)
+            'fields': ( 'union_number', 'last_name', 'first_name', 'middle_name', 'info',)
         }),
         ('Contact Information', {
             'classes': ['collapse'],
-            'fields': ('email', 'phone', 'address', 'city', 'zip_code',),
+            'fields': ('email', 'phone', 'address', 'city', 'zip_code', 'province',),
         }),
         ('Extra Information', {
             'classes': ['collapse'],
-            'fields': ('birth_date', 'info'),
+            'fields': ('birth_date', 'slug', 'author'),
         }),
     )
     search_fields = ('last_name', 'first_name', 'middle_name')
@@ -44,9 +44,26 @@ class ClubAdmin(admin.ModelAdmin):
     ordering = ('name',)
     fieldsets = (
         (None, {
-            'fields': ('name', 'town')
+            'fields': ('name', 'info')
+        }),
+        ('Contact Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'address', 
+                'zip_code', 
+                'town',
+                'phone',
+                'email',
+                'website',
+                'social_media',
+            ),
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author'),
         }),
     )
+    search_fields = ('name', 'town')
 
 @admin.register(ClubMembership)
 class ClubMembershipAdmin(admin.ModelAdmin):
@@ -56,7 +73,11 @@ class ClubMembershipAdmin(admin.ModelAdmin):
     ordering = ('archer', 'club')
     fieldsets = (
         (None, {
-            'fields': ('archer', 'club', 'start_date', 'end_date')
+            'fields': ('archer', 'club', 'start_date', 'end_date', 'info')
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author'),
         }),
     )
     search_fields = ('archer__last_name', 'club__name')

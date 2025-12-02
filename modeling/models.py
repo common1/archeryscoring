@@ -102,14 +102,6 @@ class Archer(BaseModel):
         verbose_name=_("city of archer"),
         help_text=_("format: not required, max-64")
     )
-    province = models.CharField(
-        max_length=64,
-        null=True,
-        blank=True,
-        unique=False,
-        verbose_name=_("state or province of archer"),
-        help_text=_("format: not required, max-64")
-    )
     zip_code = models.CharField(
         max_length=6,
         null=True,
@@ -117,6 +109,14 @@ class Archer(BaseModel):
         unique=False,
         verbose_name=_("zip code of archer"),
         help_text=_("format: not required, max-6")
+    )
+    province = models.CharField(
+        max_length=64,
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("state or province of archer"),
+        help_text=_("format: not required, max-64")
     )
 
     # Contact information end
@@ -135,9 +135,11 @@ class Archer(BaseModel):
     # Extra fields for archer information end
     
     panels = [
+        FieldPanel('union_number'),
         FieldPanel('last_name'),
         FieldPanel('first_name'),
         FieldPanel('middle_name'),
+        FieldPanel('info'),
         MultiFieldPanel(
             [
                 FieldPanel('email'),
@@ -145,6 +147,7 @@ class Archer(BaseModel):
                 FieldPanel('address'),
                 FieldPanel('city'),
                 FieldPanel('zip_code'),
+                FieldPanel('province'),
             ],
             heading = "Contact Information",
             classname="collapsible collapsed",
@@ -152,6 +155,8 @@ class Archer(BaseModel):
         MultiFieldPanel(
             [
                 FieldPanel('birth_date'),
+                FieldPanel('slug'),
+                FieldPanel('author'),
             ],
             heading = "Extra Information",
             classname="collapsible collapsed",
@@ -198,6 +203,14 @@ class Club(BaseModel):
         blank=True,
         verbose_name=_("address of club"),
         help_text=_("format: not required, max-128")
+    )
+    zip_code = models.CharField(
+        max_length=6,
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("zip code of archer"),
+        help_text=_("format: not required, max-6")
     )
     town = models.CharField(
         max_length=64,
@@ -267,6 +280,33 @@ class Club(BaseModel):
     )
      
     # Extra fields for club information end        
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('info'),
+        FieldPanel('archers'),
+        MultiFieldPanel(
+            [
+                FieldPanel('address'),
+                FieldPanel('zip_code'),
+                FieldPanel('town'),
+                FieldPanel('phone'),
+                FieldPanel('email'),
+                FieldPanel('website'),
+                FieldPanel('social_media'),
+            ],
+            heading = "Contact Information",
+            classname="collapsible collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
     
     class Meta:
         db_table = 'club'
@@ -301,6 +341,7 @@ class ClubMembership(BaseModel):
         help_text=_("format: required"),
         related_name='clubmember_archer'
     )
+    slug = AutoSlugField(populate_from=('archer__last_name', 'club__name'), editable=True)
     start_date = models.DateField(
         null=True,
         blank=True,
@@ -349,3 +390,4 @@ class ClubMembership(BaseModel):
 
     def __unicode__(self):
         return f"{str(self.archer)} - {str(self.club)} {self.club.town}"
+
