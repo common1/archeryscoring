@@ -2,7 +2,9 @@ from django.contrib import admin
 from .models import (
     Archer,
     Club,
-    ClubMembership
+    ClubMembership,
+    Category,
+    CategoryMembership,
 )
 
 @admin.register(Archer)
@@ -73,11 +75,68 @@ class ClubMembershipAdmin(admin.ModelAdmin):
     ordering = ('archer', 'club')
     fieldsets = (
         (None, {
-            'fields': ('archer', 'club', 'start_date', 'end_date', 'info')
+            'fields': ('archer', 'club', 'info')
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'slug', 
+                'author',
+                'start_date', 
+                'end_date',
+            ),
+        }),
+    )
+    search_fields = ('archer__last_name', 'club__name')
+
+class CategoryMembershipInline(admin.TabularInline):
+    model = CategoryMembership
+    extra = 1
+    fields = ('category', 'archer', 'age_group')
+    can_delete = False
+    show_change_link = True
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    inlines = [
+        CategoryMembershipInline
+    ]
+    list_display = ('name',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'slug', 
+                'author', 
+            ),
+        }),
+    )
+    search_fields = ('name', 'info')
+
+@admin.register(CategoryMembership)
+class CategoryMembershipAdmin(admin.ModelAdmin):
+    list_display = ('category', 'archer', 'age_group',)
+    list_display_links = ('category', 'archer',)
+    list_per_page = 20
+    ordering = ('category', 'archer')
+    fieldsets = (
+        (None, {
+            'fields': (
+                'category', 
+                'archer', 
+                'age_group', 
+                'info', 
+            )
         }),
         ('Extra Information', {
             'classes': ['collapse'],
             'fields': ('slug', 'author'),
         }),
     )
-    search_fields = ('archer__last_name', 'club__name')
+    search_fields = ('category__name', 'archer__name')

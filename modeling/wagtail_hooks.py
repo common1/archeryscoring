@@ -3,6 +3,8 @@ from .models import (
     Archer,
     Club,
     ClubMembership,
+    Category,
+    CategoryMembership,
 )
 
 class ArcherAdmin(ModelAdmin):
@@ -38,3 +40,25 @@ class ClubMembershipAdmin(ModelAdmin):
     add_to_admin_menu = True
     list_display = ('archer', 'club',)
 modeladmin_register(ClubMembershipAdmin)
+
+class CategoryAdmin(ModelAdmin):
+    model = Category
+    base_url_path = "categoryadmin"
+    menu_label = "Category"
+    menu_icon = "home"
+    menu_order = 230
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('name',)
+modeladmin_register(CategoryAdmin)
+
+class CategoryMembershipAdmin(ModelAdmin):
+    model = CategoryMembership
+    base_url_path = "categorymembershipadmin"
+    menu_label = "Category Membership"
+    menu_icon = "list-ul"
+    menu_order = 240
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('category', 'archer', 'age_group',)
+modeladmin_register(CategoryMembershipAdmin)

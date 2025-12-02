@@ -379,11 +379,33 @@ class ClubMembership(BaseModel):
 
     # Extra fields for membership information end
 
+    panels = [
+        FieldPanel('club'),
+        FieldPanel('archer'),
+        MultiFieldPanel(
+            [
+                FieldPanel('start_date'),
+                FieldPanel('end_date'),
+            ],
+            heading = "Information",
+            classname="collapsible collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+        FieldPanel('info'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
+
     class Meta:
-        db_table = 'membership'
+        db_table = 'clubmembership'
         ordering = ['start_date']
-        verbose_name = _("Membership")
-        verbose_name_plural = _("Memberships")
+        verbose_name = _("Club Membership")
+        verbose_name_plural = _("Club Memberships")
 
     def __str__(self):
         return f"{str(self.archer)} - {str(self.club)} {self.club.town}"
@@ -391,3 +413,147 @@ class ClubMembership(BaseModel):
     def __unicode__(self):
         return f"{str(self.archer)} - {str(self.club)} {self.club.town}"
 
+class Category(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._meta.get_field('slug').populate_from = 'name'
+        
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(
+        max_length=64,
+        null=False,
+        unique=False,
+        blank=False,
+        verbose_name=_("category name"),
+        help_text=_("format: required, max-64")
+    )
+    slug = AutoSlugField(populate_from='name',editable=True)
+    archers = models.ManyToManyField(
+        Archer,
+        through='CategoryMembership',
+        blank=True,
+        help_text=_("format: not required"),
+        related_name='categories',
+        verbose_name=_("archers in category"),
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("category information"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='category_author',
+        verbose_name=_("author of category"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+    
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('info'),
+        FieldPanel('archers'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
+
+    class Meta:
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+class CategoryMembership(BaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("categorymembership category"),
+        help_text=_("format: required"),
+        related_name='categorymemberships'
+    )
+    archer = models.ForeignKey(
+        Archer,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("categorymembership archer"),
+        help_text=_("format: required"),
+        related_name='categorymembership_archer'
+    )
+    age_group = models.CharField(
+        max_length=32,
+        null=True,
+        blank=True,
+        verbose_name=_("age group of category membership"),
+        help_text=_("format: not required, max-32"),
+        choices=[
+            ("youth", "Youth"),
+            ("junior", "Junior"),
+            ("senior", "Senior"),
+            ("master", "Master"),
+            ("veteran", "Veteran"),
+            ("other", "Other")
+        ]
+    )
+
+    # Extra fields for membership information
+
+    slug = AutoSlugField(populate_from=('category__name', 'archer__last_name',), editable=True)
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("category information"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='category_membership_author',
+        verbose_name=_("author of category membership"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+
+    # Extra fields for membership information end
+
+    panels = [
+        FieldPanel('category'),
+        FieldPanel('archer'),
+        FieldPanel('age_group'),
+        FieldPanel('info'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
+
+    class Meta:
+        db_table = 'categorymembership'
+        ordering = ['category__name']
+        verbose_name = _("Category Membership")
+        verbose_name_plural = _("Category Memberships")
+
+    def __str__(self):
+        return f"{str(self.archer)} - {str(self.category)}"
+
+    def __unicode__(self):
+        return f"{str(self.archer)} - {str(self.category)}"

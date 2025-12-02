@@ -53,3 +53,8 @@ pip install wagtail-modeladmin
 ```bash
 ```
 
+## Chapter 006 - modeling app, Create models Category and CategoryMembership
+
+```bash
+```
+
