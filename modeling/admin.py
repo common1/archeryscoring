@@ -92,7 +92,7 @@ class ClubMembershipAdmin(admin.ModelAdmin):
 class CategoryMembershipInline(admin.TabularInline):
     model = CategoryMembership
     extra = 1
-    fields = ('category', 'archer', 'age_group')
+    fields = ('category', 'archer', 'agegroup')
     can_delete = False
     show_change_link = True
 
@@ -121,7 +121,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(CategoryMembership)
 class CategoryMembershipAdmin(admin.ModelAdmin):
-    list_display = ('category', 'archer', 'age_group',)
+    list_display = ('category', 'archer', 'agegroup',)
     list_display_links = ('category', 'archer',)
     list_per_page = 20
     ordering = ('category', 'archer')
@@ -130,7 +130,7 @@ class CategoryMembershipAdmin(admin.ModelAdmin):
             'fields': (
                 'category', 
                 'archer', 
-                'age_group', 
+                'agegroup', 
                 'info', 
             )
         }),
@@ -140,3 +140,4 @@ class CategoryMembershipAdmin(admin.ModelAdmin):
         }),
     )
     search_fields = ('category__name', 'archer__name')
+

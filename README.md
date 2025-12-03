@@ -58,3 +58,14 @@ pip install wagtail-modeladmin
 ```bash
 ```
 
+## Chapter 007 - modeling app, Create models
+
+```
+Models created
+Team
+TeamMembership
+ScoringSheet
+```
+
+```bash
+```
