@@ -69,3 +69,20 @@ ScoringSheet
 
 ```bash
 ```
+
+## Chapter 008 - modeling app add classes to admin.py and wagtail_hooks.py
+
+```
+admin.py
+class TeamMembershipInline
+class TeamAdmin
+class TeamMembershipAdmin
+
+wagtail_hooks.py
+class TeamAdminWagtailHook
+class TeamMembershipAdminWagtailHook
+```
+
+```bash
+```
+

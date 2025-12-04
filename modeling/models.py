@@ -681,6 +681,39 @@ class TeamMembership(BaseModel):
         editable=True,
     )
 
+    # Extra fields for teammembership information
+    
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("teammembership information"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='teammembership',
+        verbose_name=_("author of teammembershipmembership"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+
+    # Extra fields for teammembership information end
+
+    panels = [
+        FieldPanel('team'),
+        FieldPanel('archer'),
+        FieldPanel('info'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]   
     class Meta:
         db_table = 'teammembership'
         ordering = ['team__name']

@@ -5,6 +5,8 @@ from .models import (
     ClubMembership,
     Category,
     CategoryMembership,
+    Team,
+    TeamMembership,
 )
 
 @admin.register(Archer)
@@ -72,10 +74,10 @@ class ClubMembershipAdmin(admin.ModelAdmin):
     list_display = ('archer', 'club', 'start_date', 'end_date')
     list_display_links = ('archer',)
     list_per_page = 20
-    ordering = ('archer', 'club')
+    ordering = ('club', 'archer',)
     fieldsets = (
         (None, {
-            'fields': ('archer', 'club', 'info')
+            'fields': ('club','archer', 'info')
         }),
         ('Extra Information', {
             'classes': ['collapse'],
@@ -141,3 +143,45 @@ class CategoryMembershipAdmin(admin.ModelAdmin):
     )
     search_fields = ('category__name', 'archer__name')
 
+class TeamMembershipInline(admin.TabularInline):
+    model = TeamMembership
+    extra = 1
+    fields = ('team', 'archer',)
+    can_delete = False
+    show_change_link = True
+
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    inlines = [
+        TeamMembershipInline
+    ]
+    list_display = ('name',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+    )
+    search_fields = ('name',)
+@admin.register(TeamMembership)
+class TeamMembershipAdmin(admin.ModelAdmin):
+    list_display = ('team', 'archer',)
+    list_display_links = ('team', 'archer',)
+    list_per_page = 20
+    ordering = ('team', 'archer',)
+    fieldsets = (
+        (None, {
+            'fields': ('team', 'archer', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+    )
+    search_fields = ('team__name', 'archer__name')

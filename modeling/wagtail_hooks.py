@@ -5,6 +5,8 @@ from .models import (
     ClubMembership,
     Category,
     CategoryMembership,
+    Team,
+    TeamMembership,
 )
 
 class ArcherAdmin(ModelAdmin):
@@ -16,7 +18,6 @@ class ArcherAdmin(ModelAdmin):
     add_to_settings_menu = True
     add_to_admin_menu = True
     list_display = ('union_number', 'last_name', 'first_name', 'middle_name',)
-
 modeladmin_register(ArcherAdmin)
 
 class ClubAdmin(ModelAdmin):
@@ -62,3 +63,25 @@ class CategoryMembershipAdmin(ModelAdmin):
     add_to_admin_menu = True
     list_display = ('category', 'archer', 'age_group',)
 modeladmin_register(CategoryMembershipAdmin)
+
+class TeamAdminWagtailHook(ModelAdmin):
+    model = Team
+    base_url_path = "teamadmin"
+    menu_label = "Team"
+    menu_icon = "group"
+    menu_order = 250
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('name',)
+modeladmin_register(TeamAdminWagtailHook)
+
+class TeamMembershipAdminWagtailHook(ModelAdmin):
+    model = TeamMembership
+    base_url_path = "teammembershipadmin"
+    menu_label = "Team Membership"
+    menu_icon = "list-ul"
+    menu_order = 260
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('team', 'archer',)
+modeladmin_register(TeamMembershipAdminWagtailHook)
