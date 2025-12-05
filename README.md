@@ -86,3 +86,14 @@ class TeamMembershipAdminWagtailHook
 ```bash
 ```
 
+## Chapter 009 - modeling app wagtail_hooks.py
+
+```
+Hook added to class names
+A lot of classes defined
+Implementation follows
+```
+
+```bash
+```
+

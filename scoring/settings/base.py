@@ -47,11 +47,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    # Wagtail extensions
+    "wagtail_modeladmin",
     # Extensions
     "users",
     "api",
-    "wagtail_modeladmin",
     "modeling",
+    "grid",
+    "archery_materials",
 ]
 
 MIDDLEWARE = [

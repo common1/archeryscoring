@@ -7,6 +7,7 @@ from .models import (
     CategoryMembership,
     Team,
     TeamMembership,
+    ScoringSheet,
 )
 
 @admin.register(Archer)
@@ -185,3 +186,20 @@ class TeamMembershipAdmin(admin.ModelAdmin):
         }),
     )
     search_fields = ('team__name', 'archer__name')
+    
+@admin.register(ScoringSheet)
+class ScoringSheetAdmin(admin.ModelAdmin):
+    list_display = ('name', 'columns', 'rows')
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'columns', 'rows', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+    )
+    search_fields = ('name', 'info')

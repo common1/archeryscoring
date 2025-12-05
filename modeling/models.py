@@ -5,8 +5,10 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
 from users.models import User
-from wagtail.admin.panels import MultiFieldPanel, FieldPanel
+from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
 from django.core.validators import MaxValueValidator, MinValueValidator
+
+from wagtail.models import Page
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
@@ -567,7 +569,7 @@ class CategoryMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='category_membership_author',
-        verbose_name=_("author of category membership"),
+        verbose_name=_("author of categorymembership"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -695,7 +697,7 @@ class TeamMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='teammembership',
-        verbose_name=_("author of teammembershipmembership"),
+        verbose_name=_("author of teammembership"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -727,7 +729,7 @@ class TeamMembership(BaseModel):
         return f"{str(self.archer)} - {str(self.team)}"
     
 #----------------------------------------
-# Additional Equipment Models
+# ScoringSheet Models
 #----------------------------------------
 
 class ScoringSheet(BaseModel):
@@ -757,12 +759,12 @@ class ScoringSheet(BaseModel):
         unique=False,
         null=False,
         blank=False,
-        default=20,
+        default=10,
         validators=[MinValueValidator(3), MaxValueValidator(20)],
         verbose_name=_("number of rows"),
         help_text=_("format: required min-3, max-20")
     )
-
+        
     info = models.TextField(
         null=True,
         blank=True,
@@ -778,7 +780,24 @@ class ScoringSheet(BaseModel):
         verbose_name=_("author of scoring sheet"),
         help_text=_("format: required, default=1 (superuser)"),
     )
-
+    
+    panels = [  
+        FieldPanel('name'),
+        FieldRowPanel([
+            FieldPanel('columns'),
+            FieldPanel('rows'),            
+        ]),
+        FieldPanel('info'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
+    
     class Meta:
         db_table = 'scoringsheet'
         ordering = ['name']
@@ -791,809 +810,28 @@ class ScoringSheet(BaseModel):
     def __unicode__(self):
         return f"{self.name} ( {self.dimension} )"
 
-# Recurve, Barebow, Longbow, Compound, Crossbow
-# class BowStyle(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=32,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("bow style name"),
-#         help_text=_("format: required, max-32")
-#     )
+class TargetFace(BaseModel):
+    pass
 
-#     class Meta:
-#         db_table = 'bowstyle'
-#         ordering = ['name']
-#         verbose_name = _("Bow Style")
-#         verbose_name_plural = _("Bow Styles")
+class Contest(BaseModel):
+    pass
 
-#     def __str__(self):
-#         return self.name
+class ContestMembership(BaseModel):
+    pass
 
-#     def __unicode__(self):
-#         return self.name
+class Result(BaseModel):
+    pass
 
-# Wooden, Carbon, Aluminum, Hybrid
-# class BowType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=32,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("bow type name"),
-#         help_text=_("format: required, max-32")
-#     )
+class ResultMembership(BaseModel):
+    pass
 
-#     class Meta:
-#         db_table = 'bowtype'
-#         ordering = ['name']
-#         verbose_name = _("Bow Type")
-#         verbose_name_plural = _("Bow Types")
+class Competition(BaseModel):
+    pass
 
-#     def __str__(self):
-#         return self.name
+class CompetitionMembership(BaseModel):
+    pass
 
-#     def __unicode__(self):
-#         return self.name
+# Wagtail Pages
 
-# class Bow(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     archer = models.ForeignKey(
-#         Archer,
-#         on_delete=models.CASCADE,
-#         unique=False,
-#         verbose_name=_("owner archer"),
-#         help_text=_("format: required"),
-#         related_name='bows'
-#     )
-#     bow_style = models.ForeignKey(
-#         BowStyle,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("bow style"),
-#         help_text=_("format: required"),
-#         related_name='bows'
-#     )
-#     bow_type = models.ForeignKey(
-#         BowType,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("bow type"),
-#         help_text=_("format: required"),
-#         related_name='bows'
-#     )
-
-#     class Meta:
-#         db_table = 'bow'
-#         ordering = ['archer__last_name']
-#         verbose_name = _("Bow")
-#         verbose_name_plural = _("Bows")
-
-#     def __str__(self):
-#         return f"{str(self.archer)} - {self.bow_style.name} {self.bow_type.name}"
-
-#     def __unicode__(self):
-#         return f"{str(self.archer)} - {self.bow_style.name} {self.bow_type.name}"
-
-# Carbon, Aluminum, Wood, Fiberglass
-# class ArrowMaterial(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=32,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arrow material name"),
-#         help_text=_("format: required, max-32")
-#     )
-
-#     class Meta:
-#         db_table = 'arrowmaterial'
-#         ordering = ['name']
-#         verbose_name = _("Arrow Material")
-#         verbose_name_plural = _("Arrow Materials")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Wood, Plastic, Feather, Carbon
-# class ArrowType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=32,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arrow type name"),
-#         help_text=_("format: required, max-32")
-#     )
-
-#     class Meta:
-#         db_table = 'arrowtype'
-#         ordering = ['name']
-#         verbose_name = _("Arrow Type")
-#         verbose_name_plural = _("Arrow Types")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Nock Types: Plastic, Feather, Pinch, Insert
-# class ArrowNock(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arrow nock name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'arrownock'
-#         ordering = ['name']
-#         verbose_name = _("Arrow Nock")
-#         verbose_name_plural = _("Arrow Nocks")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Arrow(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     archer = models.ForeignKey(
-#         Archer,
-#         on_delete=models.CASCADE,
-#         unique=False,
-#         verbose_name=_("owner archer"),
-#         help_text=_("format: required"),
-#         related_name='arrows'
-#     )
-#     arrow_type = models.ForeignKey(
-#         ArrowType,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("arrow type"),
-#         help_text=_("format: required"),
-#         related_name='arrows'
-#     )
-#     arrow_material = models.ForeignKey(
-#         ArrowMaterial,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         unique=False,
-#         verbose_name=_("arrow material"),
-#         help_text=_("format: required"),
-#         related_name='arrows'
-#     )
-#     arrow_nock = models.ForeignKey(
-#         ArrowNock,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         unique=False,
-#         verbose_name=_("arrow nock"),
-#         help_text=_("format: required"),
-#         related_name='arrows'
-#     )
-
-#     class Meta:
-#         db_table = 'arrow'
-#         ordering = ['archer__last_name']
-#         verbose_name = _("Arrow")
-#         verbose_name_plural = _("Arrows")
-
-#     def __str__(self):
-#         return f"{str(self.archer)} - {self.arrow_material.name} {self.arrow_type.name}"
-
-#     def __unicode__(self):
-#         return f"{str(self.archer)} - {self.arrow_material.name} {self.arrow_type.name}"
-
-# # Quiver Types: Back, Hip, Bow-mounted
-# class QuiverType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("quiver type name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'quivertype'
-#         ordering = ['name']
-#         verbose_name = _("Quiver Type")
-#         verbose_name_plural = _("Quiver Types")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Quiver Materials: Leather, Synthetic, Plastic, Metal
-# class QuiverMaterial(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("quiver material name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'quivermaterial'
-#         ordering = ['name']
-#         verbose_name = _("Quiver Material")
-#         verbose_name_plural = _("Quiver Materials")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Quiver(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     archer = models.ForeignKey(
-#         Archer,
-#         on_delete=models.CASCADE,
-#         unique=False,
-#         verbose_name=_("owner archer"),
-#         help_text=_("format: required"),
-#         related_name='quivers'
-#     )
-#     quiver_type = models.ForeignKey(
-#         QuiverType,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         unique=False,
-#         verbose_name=_("quiver type"),
-#         help_text=_("format: required"),
-#         related_name='quivers'
-#     )
-#     quiver_material = models.ForeignKey(
-#         QuiverMaterial,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         unique=False,
-#         verbose_name=_("quiver material"),
-#         help_text=_("format: required"),
-#         related_name='quivers'
-#     )
-
-#     class Meta:
-#         db_table = 'quiver'
-#         ordering = ['archer__last_name']
-#         verbose_name = _("Quiver")
-#         verbose_name_plural = _("Quivers")
-
-#     def __str__(self):
-#         return f"{str(self.archer)} - {self.quiver_material.name} {self.quiver_type.name}"
-
-# class TargetFace(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("target face name"),
-#         help_text=_("format: required, max-64")
-#     )
-#     # Target face diameters in cm: 20, 40, 60, 80, 122
-#     diameter_cm = models.FloatField(
-#         null=False,
-#         unique=False,
-#         blank=False,
-#         verbose_name=_("target face diameter in cm"),
-#         help_text=_("format: required"),
-#     )
-
-#     class Meta:
-#         db_table = 'targetface'
-#         ordering = ['name']
-#         verbose_name = _("Target Face")
-#         verbose_name_plural = _("Target Faces")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Target(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     target_face = models.ForeignKey(
-#         TargetFace,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("target face"),
-#         help_text=_("format: required"),
-#         related_name='targets'
-#     )
-#     # Target distances in meters: 18, 30, 50, 70, 90, 100, 122
-#     distance_m = models.PositiveIntegerField(
-#         null=False,
-#         unique=False,
-#         blank=False,
-#         verbose_name=_("target distance in meters"),
-#         help_text=_("format: required"),
-#     )
-
-#     class Meta:
-#         db_table = 'target'
-#         ordering = ['target_face__name']
-#         verbose_name = _("Target")
-#         verbose_name_plural = _("Targets")
-
-#     def __str__(self):
-#         return f"{self.target_face.name} - {self.distance_m}m"
-
-#     def __unicode__(self):
-#         return f"{self.target_face.name} - {self.distance_m}m"
-
-# class NockingPoint(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("nocking point name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'nockingpoint'
-#         ordering = ['name']
-#         verbose_name = _("Nocking Point")
-#         verbose_name_plural = _("Nocking Points")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Sight Types: Pin, Aperture, Scope, Peep
-# class Sight(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("sight name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'sight'
-#         ordering = ['name']
-#         verbose_name = _("Sight")
-#         verbose_name_plural = _("Sights")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Stabilizer Types: Rod, Bar, Side, V-Bar
-# class Stabilizer(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("stabilizer name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'stabilizer'
-#         ordering = ['name']
-#         verbose_name = _("Stabilizer")
-#         verbose_name_plural = _("Stabilizers")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Clicker(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("clicker name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'clicker'
-#         ordering = ['name']
-#         verbose_name = _("Clicker")
-#         verbose_name_plural = _("Clickers")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Plunger(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("plunger name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'plunger'
-#         ordering = ['name']
-#         verbose_name = _("Plunger")
-#         verbose_name_plural = _("Plungers")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Finger Tab Types: Leather, Synthetic, Hybrid
-# class FingerTab(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("finger tab name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'fingertab'
-#         ordering = ['name']
-#         verbose_name = _("Finger Tab")
-#         verbose_name_plural = _("Finger Tabs")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class ArmGuard(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arm guard name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'armguard'
-#         ordering = ['name']
-#         verbose_name = _("Arm Guard")
-#         verbose_name_plural = _("Arm Guards")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class ChestGuard(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("chest guard name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'chestguard'
-#         ordering = ['name']
-#         verbose_name = _("Chest Guard")
-#         verbose_name_plural = _("Chest Guards")
-
-#     def __str__(self):
-#         return self.name
-
-# class Riser(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("riser name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'riser'
-#         ordering = ['name']
-#         verbose_name = _("Riser")
-#         verbose_name_plural = _("Risers")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Limb Types: Upper, Lower, Solid, Takedown
-# class LimbType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("limb type name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'limbtype'
-#         ordering = ['name']
-#         verbose_name = _("Limb Type")
-#         verbose_name_plural = _("Limb Types")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Limb(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("limb name"),
-#         help_text=_("format: required, max-64")
-#     )
-#     limb_type = models.ForeignKey(
-#         LimbType,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("limb type"),
-#         help_text=_("format: required"),
-#         related_name='limbs'
-#     )
-
-#     class Meta:
-#         db_table = 'limb'
-#         ordering = ['name']
-#         verbose_name = _("Limb")
-#         verbose_name_plural = _("Limbs")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Handle Types: Wood, Aluminum, Composite
-# class HandleType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("handle type name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'handletype'
-#         ordering = ['name']
-#         verbose_name = _("Handle Type")
-#         verbose_name_plural = _("Handle Types")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class Handle(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("handle name"),
-#         help_text=_("format: required, max-64")
-#     )
-#     handle_type = models.ForeignKey(
-#         HandleType,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("handle type"),
-#         help_text=_("format: required"),
-#         related_name='handles'
-#     )
-
-#     class Meta:
-#         db_table = 'handle'
-#         ordering = ['name']
-#         verbose_name = _("Handle")
-#         verbose_name_plural = _("Handles")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Biwstring Materials: Dacron, Fast Flight, BCY, Flemish Twist
-# class BowStringMaterial(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("string material name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'stringmaterial'
-#         ordering = ['name']
-#         verbose_name = _("String Material")
-#         verbose_name_plural = _("String Materials")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class BowString(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("string name"),
-#         help_text=_("format: required, max-64")
-#     )
-#     string_material = models.ForeignKey(
-#         BowStringMaterial,
-#         on_delete=models.PROTECT,
-#         null=True,
-#         blank=True,
-#         unique=False,
-#         verbose_name=_("bowstring material"),
-#         help_text=_("format: required"),
-#         related_name='bowstrings'
-#     )
-
-#     class Meta:
-#         db_table = 'bowstring'
-#         ordering = ['name']
-#         verbose_name = _("Bow String")
-#         verbose_name_plural = _("Bow Strings")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# # Arrow Rest Types: Shelf, Drop-away, Plunger
-# class ArrowRestType(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arrow rest type name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'arrowresttype'
-#         ordering = ['name']
-#         verbose_name = _("Arrow Rest Type")
-#         verbose_name_plural = _("Arrow Rest Types")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# class ArrowRest(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("arrow rest name"),
-#         help_text=_("format: required, max-64")
-#     )
-#     arrow_rest_type = models.ForeignKey(
-#         ArrowRestType,
-#         on_delete=models.PROTECT,
-#         unique=False,
-#         verbose_name=_("arrow rest type"),
-#         help_text=_("format: required"),
-#         related_name='arrowrests'
-#     )
-
-#     class Meta:
-#         db_table = 'arrowrest'
-#         ordering = ['name']
-#         verbose_name = _("Arrow Rest")
-#         verbose_name_plural = _("Arrow Rests")
-
-#     def __str__(self):
-#         return self.name
-
-# ## Nocking Point Types: Brass, Plastic, Rubber
-# class NockingPoint(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=64,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("nocking point name"),
-#         help_text=_("format: required, max-64")
-#     )
-
-#     class Meta:
-#         db_table = 'nockingpoint'
-#         ordering = ['name']
-#         verbose_name = _("Nocking Point")
-#         verbose_name_plural = _("Nocking Points")
-
-#     def __str__(self):
-#         return self.name
+class GridPage(Page):
+    pass
