@@ -1,78 +1,95 @@
 from django.db import models
 
-class GridItem(models.Model):
+class BaseCell(models.Model):
+    value = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+class Grid_10x3(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.position_x = self.x
-        self.position_y = self.y
-        self.value = self.value
-
-    x = models.PositiveIntegerField()
-    y = models.PositiveIntegerField()
-    value = models.PositiveIntegerField()
-
-    def __str__(self):
-        return f"{self.value}"
-    
-class AbstractGrid(models.Model):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    name = models.CharField(max_length=64)
-    items = models.ManyToManyField(GridItem)
-
-    def __str__(self):
-        return self.name
-
-    def add_item(self, item):
-        self.items.add(item)
-
-    def remove_item(self, item):
-        self.items.remove(item)
-
-    def get_items(self):
-        return self.items.all()
-
-    def clear_items(self):
-        self.items.clear()
-
-    def get_item_at_position(self, x, y):
-        return self.items.filter(position_x=x, position_y=y).first() or None
-    
-    def move_item(self, item, new_x, new_y):
-        if item in self.items.all():
-            item.position_x = new_x
-            item.position_y = new_y
-            item.save()
-            
-    class Meta:
-        abstract = True
-
-class Indoor18MetersGrid(AbstractGrid):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def create_grid(self):
-        for y in range(10):
-            for x in range(3):
-                item = GridItem.objects.create(x=x, y=y, value=0)
-                self.add_item(item)
+    # Serie 1
+    x1y1 = BaseCell()
+    x2y1 = BaseCell()
+    x3y1 = BaseCell()
+    # Serie 2
+    x1y2 = BaseCell()
+    x2y2 = BaseCell()
+    x3y2 = models.PositiveIntegerField()
+    # Serie 3
+    x1y3 = BaseCell()
+    x2y3 = BaseCell()
+    x3y3 = BaseCell()
+    # Serie 4
+    x1y4 = BaseCell()
+    x2y4 = BaseCell()
+    x3y4 = BaseCell()
+    # Serie 5
+    x1y5 = BaseCell()
+    x2y5 = BaseCell()
+    x3y5 = BaseCell()
+    # Serie 6
+    x1y6 = BaseCell()
+    x2y6 = BaseCell()
+    x3y6 = BaseCell()
+    # Serie 7
+    x1y7 = BaseCell()
+    x2y7 = BaseCell()
+    x3y7 = BaseCell()
+    # Serie 8
+    x1y8 = BaseCell()
+    x2y8 = BaseCell()
+    x3y8 = BaseCell()
+    # Serie 9
+    x1y9 = BaseCell()
+    x2y9 = BaseCell()
+    x3y9 = BaseCell()
+    # Serie 10
+    x1y10 = BaseCell()
+    x2y10 = BaseCell()
+    x3y10 = BaseCell()
 
     class Meta:
-        verbose_name = "Indoor 18 Meters Grid"
-        verbose_name_plural = "Indoor 18 Meters Grids"
+        db_table = "grid_10x3"
+        verbose_name = "10x3 Grid"
+        verbose_name_plural = "10x3 Grids"
 
-class Indoor25MetersGrid(AbstractGrid):
+class Grid_5x5(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def create_grid(self):
-        for y in range(5):
-            for x in range(5):
-                item = GridItem.objects.create(x=x, y=y, value=0)
-                self.add_item(item)
+        
+    # Serie 1
+    x1y1 = BaseCell()
+    x2y1 = BaseCell()
+    x3y1 = BaseCell()
+    x4y1 = BaseCell()
+    x5y1 = BaseCell()
+    # Serie 2
+    x1y2 = BaseCell()
+    x2y2 = BaseCell()
+    x3y2 = BaseCell()
+    x4y2 = BaseCell()
+    x5y2 = BaseCell()
+    # Serie 3
+    x1y3 = BaseCell()
+    x2y3 = BaseCell()
+    x3y3 = BaseCell()
+    x4y3 = BaseCell()
+    x5y3 = BaseCell()
+    # Serie 4
+    x1y4 = BaseCell()
+    x2y4 = BaseCell()
+    x3y4 = BaseCell()
+    x4y4 = BaseCell()
+    x5y4 = BaseCell()
+    # Serie 5
+    x1y5 = BaseCell()
+    x2y5 = BaseCell()
+    x3y5 = BaseCell()
+    x4y5 = BaseCell()
+    x5y5 = BaseCell()
 
     class Meta:
-        verbose_name = "Indoor 25 Meters Grid"
-        verbose_name_plural = "Indoor 25 Meters Grids"
+        db_table = "grid_5x5"
+        verbose_name = "5x5 Grid"
+        verbose_name_plural = "5x5 Grids"
+

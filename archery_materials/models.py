@@ -149,3 +149,4 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
 
     def __unicode__(self):
         return f"{str(self.archer)} - {str(self.bowtype)}"
+

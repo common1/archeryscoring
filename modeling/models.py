@@ -184,6 +184,112 @@ class Archer(BaseModel):
             s_middle_name = self.middle_name
         return f"{self.last_name} {self.first_name} {s_middle_name}"
 
+# Target Archery
+# Field Archery
+# 3D Archery
+# Flight Archery
+# Clout Archery
+# Ski Archery
+# Bowhunting
+class Discipline(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self._meta.get_field('slug').populate_from = 'name'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(
+        max_length=64,
+        null=False,
+        unique=True,
+        blank=False,
+        verbose_name=_("discipline name"),
+        help_text=_("format: required, max-64")
+    )
+    slug = AutoSlugField(populate_from='name',editable=True)
+    archers = models.ManyToManyField(
+        Archer,
+        through='DisciplineMembership',
+        blank=True,
+        help_text=_("format: not required"),
+        related_name='disciplines',
+        verbose_name=_("archers in discipline"),
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("discipline information"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='discipline_author',
+        verbose_name=_("author of discipline"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('info'),
+        FieldPanel('archers'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+    ]
+    
+    class Meta:
+        db_table = 'discipline'
+        ordering = ['name']
+        verbose_name = _("Discipline")
+        verbose_name_plural = _("Disciplines")
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+class DisciplineMembership(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    discipline = models.ForeignKey(
+        Discipline,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("disciplinemembership discipline"),
+        help_text=_("format: required"),
+        related_name='disciplinememberships'
+    )
+    archer = models.ForeignKey(
+        Archer,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("disciplinemembership archer"),
+        help_text=_("format: required"),
+        related_name='disciplinemembership_archer'
+    )
+
+    class Meta:
+        db_table = 'disciplinemembership'
+        ordering = ['discipline__name']
+        verbose_name = _("Discipline Membership")
+        verbose_name_plural = _("Discipline Memberships")
+
+    def __str__(self):
+        return f"{str(self.archer)} - {str(self.discipline)}"
+
+    def __unicode__(self):
+        return f"{str(self.archer)} - {str(self.discipline)}"
+
 class Club(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

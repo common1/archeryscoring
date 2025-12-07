@@ -2,31 +2,7 @@
 # Additional Equipment Models
 #----------------------------------------
 
-# Recurve, Barebow, Longbow, Compound, Crossbow
-# class BowStyle(BaseModel):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     name = models.CharField(
-#         max_length=32,
-#         null=False,
-#         unique=True,
-#         blank=False,
-#         verbose_name=_("bow style name"),
-#         help_text=_("format: required, max-32")
-#     )
-
-#     class Meta:
-#         db_table = 'bowstyle'
-#         ordering = ['name']
-#         verbose_name = _("Bow Style")
-#         verbose_name_plural = _("Bow Styles")
-
-#     def __str__(self):
-#         return self.name
-
-#     def __unicode__(self):
-#         return self.name
-
-# Wooden, Recurve, Longbow, Compound
+# Recurve, Longbow, Compound
 # class BowType(BaseModel):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 #     name = models.CharField(
@@ -43,6 +19,30 @@
 #         ordering = ['name']
 #         verbose_name = _("Bow Type")
 #         verbose_name_plural = _("Bow Types")
+
+#     def __str__(self):
+#         return self.name
+
+#     def __unicode__(self):
+#         return self.name
+
+# Freestyle, Barebow, Traditional
+# class ShootingStyle(BaseModel):
+#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     name = models.CharField(
+#         max_length=32,
+#         null=False,
+#         unique=True,
+#         blank=False,
+#         verbose_name=_("bow style name"),
+#         help_text=_("format: required, max-32")
+#     )
+
+#     class Meta:
+#         db_table = 'bowstyle'
+#         ordering = ['name']
+#         verbose_name = _("Bow Style")
+#         verbose_name_plural = _("Bow Styles")
 
 #     def __str__(self):
 #         return self.name

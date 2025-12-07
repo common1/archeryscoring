@@ -5,6 +5,8 @@ from .models import (
     ClubMembership,
     Category,
     CategoryMembership,
+    Discipline,
+    DisciplineMembership,
     Team,
     TeamMembership,
     ScoringSheet,
@@ -144,6 +146,57 @@ class CategoryMembershipAdmin(admin.ModelAdmin):
     )
     search_fields = ('category__name', 'archer__name')
 
+class DisciplineMembershipInline(admin.TabularInline):
+    model = DisciplineMembership
+    extra = 1
+    fields = ('discipline', 'archer',)
+    can_delete = False
+    show_change_link = True
+    
+@admin.register(Discipline)
+class DisciplineAdmin(admin.ModelAdmin):
+    inlines = [
+        DisciplineMembershipInline
+    ]
+    list_display = ('name',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'slug', 
+                'author', 
+            ),
+        }),
+    )
+    search_fields = ('name', 'info')
+    
+@admin.register(DisciplineMembership)
+class DisciplineMembershipAdmin(admin.ModelAdmin):
+    list_display = ('discipline', 'archer',)
+    list_display_links = ('discipline', 'archer',)
+    list_per_page = 20
+    ordering = ('discipline', 'archer',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'discipline', 
+                'archer', 
+                'info', 
+            )
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author'),
+        }),
+    )
+    search_fields = ('discipline__name', 'archer__name')
+    
 class TeamMembershipInline(admin.TabularInline):
     model = TeamMembership
     extra = 1
@@ -170,6 +223,7 @@ class TeamAdmin(admin.ModelAdmin):
         }),
     )
     search_fields = ('name',)
+
 @admin.register(TeamMembership)
 class TeamMembershipAdmin(admin.ModelAdmin):
     list_display = ('team', 'archer',)
