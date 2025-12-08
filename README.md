@@ -152,3 +152,12 @@ python manage.py startapp fill_db
 python manage.py fill_db
 ```
 
+## Chapter 014 - Migrating from ModelAdmin to Snippets
+
+```
+Convert from ModelAdmin to ModelAdminGroup
+```
+
+```bash
+```
+

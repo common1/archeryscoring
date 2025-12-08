@@ -872,7 +872,7 @@ class ScoringSheet(BaseModel):
         unique=False,
         blank=False,
         verbose_name=_("scoringsheet name"),
-        help_text=_("format: not required, max-64")
+        help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
     columns = models.PositiveIntegerField(

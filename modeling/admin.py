@@ -257,3 +257,118 @@ class ScoringSheetAdmin(admin.ModelAdmin):
         }),
     )
     search_fields = ('name', 'info')
+    
+# Snippets
+
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
+from wagtail.snippets.models import register_snippet
+from wagtail.admin.ui.tables import BooleanColumn   
+
+class ArcherSnippetViewSet(SnippetViewSet):
+    model = Archer
+    menu_label = "Archer"
+    menu_icon = "user"
+    menu_order = 10
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('union_number', 'last_name', 'first_name', 'middle_name', BooleanColumn('is_active'),)
+
+class ClubSnippetViewSet(SnippetViewSet):
+    model = Club
+    menu_label = "Club"
+    menu_icon = "home"
+    menu_order = 20
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('name', 'town', BooleanColumn('is_active'),)
+
+class ClubMembershipViewSet(SnippetViewSet):
+    model = ClubMembership
+    base_url_path="clubmembershiphook"
+    menu_label = "ClubMembership"
+    menu_icon = "list-ul"
+    menu_order = 30
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('archer', 'club',)
+
+class CategoryViewSet(SnippetViewSet):
+    model = Category
+    menu_label = "Category"
+    menu_icon = "home"
+    menu_order = 40
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('name',)
+
+class CategoryMembershipViewSet(SnippetViewSet):
+    model = CategoryMembership
+    menu_label = "Category Membership"
+    menu_icon = "list-ul"
+    menu_order = 50
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('category', 'archer', 'agegroup',)
+
+class TeamViewSet(SnippetViewSet):
+    model = Team
+    menu_label = "Team"
+    menu_icon = "group"
+    menu_order = 60
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('name',)
+
+class TeamMembershipViewSet(SnippetViewSet):
+    model = TeamMembership
+    menu_label = "Team Membership"
+    menu_icon = "list-ul"
+    menu_order = 70
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('team', 'archer',)
+
+class ScoringSheetViewSet(SnippetViewSet):
+    model = ScoringSheet
+    menu_label = "Scoring Sheet"
+    menu_icon = "doc-full"
+    menu_order = 80
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('name', 'columns', 'rows',)
+
+class DisciplineViewSet(SnippetViewSet):
+    model = Discipline
+    menu_label = "Discipline"
+    menu_icon = "list-ul"
+    menu_order = 280
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('name',)
+
+class DisciplineMembershipViewSet(SnippetViewSet):
+    model = DisciplineMembership
+    menu_label = "Discipline Membership"
+    menu_icon = "list-ul"
+    menu_order = 290
+    add_to_settings_menu = False
+    add_to_admin_menu = False
+    list_display = ('discipline', 'archer',)
+
+class ModelingSnippetViewSetGroup(SnippetViewSetGroup):
+    menu_label = "Modeling Snippets"
+    menu_icon = "folder-open-inverse"
+    menu_order = 300
+    items = (
+        ArcherSnippetViewSet,
+        ClubSnippetViewSet,
+        ClubMembershipViewSet,
+        CategoryViewSet,
+        CategoryMembershipViewSet,
+        TeamViewSet,
+        TeamMembershipViewSet,
+        ScoringSheetViewSet,
+        DisciplineViewSet,
+        DisciplineMembershipViewSet,
+    )
+register_snippet(ModelingSnippetViewSetGroup)    
