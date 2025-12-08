@@ -134,3 +134,21 @@ modeling\wagtail_hooks.py
 ```bash
 ```
 
+## Chapter 013 - Create fill_db app - Fill database with default values
+
+```
+fill_db\management\commands\fill_db.py
+Create sample archers
+Create sample clubs
+Create sample clubmemberships
+Create sample catergories
+Create sample categorymemberships
+Create sample disciplines
+Create sample disciplinememberships
+```
+
+```bash
+python manage.py startapp fill_db
+python manage.py fill_db
+```
+

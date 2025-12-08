@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "modeling",
     "grid",
     "archery_materials",
+    "fill_db",
 ]
 
 MIDDLEWARE = [

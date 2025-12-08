@@ -185,11 +185,14 @@ class Archer(BaseModel):
         return f"{self.last_name} {self.first_name} {s_middle_name}"
 
 # Target Archery
+# Indoor Archery
 # Field Archery
 # 3D Archery
 # Flight Archery
 # Clout Archery
 # Ski Archery
+# Para Archery
+# Run archery
 # Bowhunting
 class Discipline(BaseModel):
     def __init__(self, *args, **kwargs):
@@ -276,6 +279,21 @@ class DisciplineMembership(BaseModel):
         verbose_name=_("disciplinemembership archer"),
         help_text=_("format: required"),
         related_name='disciplinemembership_archer'
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("membership information"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='discipline_membership_author',
+        verbose_name=_("author of membership"),
+        help_text=_("format: required, default=1 (superuser)"),
     )
 
     class Meta:
@@ -522,6 +540,11 @@ class ClubMembership(BaseModel):
     def __unicode__(self):
         return f"{str(self.archer)} - {str(self.club)} {self.club.town}"
 
+# Olympic Recurve
+# Compound
+# Barebow
+# Longbow
+# Traditional
 class Category(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
