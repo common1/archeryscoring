@@ -105,3 +105,23 @@ Implementation follows
 ```bash
 ```
 
+## Chapter 011 - modelling app and archery_materials app - Add Discipline classes
+
+```
+modeling/models.py
+class Discipline
+class DisciplineMembership
+
+modeling/admin.py
+class TeamMembershipInline
+class TeamAdmin
+class TeamMembershipAdmin
+
+modeling/wagtail_hooks.py
+class DisciplineHook
+class DisciplineMembershipHook
+```
+
+```bash
+```
+

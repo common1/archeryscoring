@@ -5,6 +5,8 @@ from .models import (
     ClubMembership,
     Category,
     CategoryMembership,
+    Discipline,
+    DisciplineMembership,
     Team,
     TeamMembership,
     ScoringSheet,
@@ -97,3 +99,25 @@ class ScoringSheetHook(ModelAdmin):
     add_to_admin_menu = True
     list_display = ('name', 'date',)
 modeladmin_register(ScoringSheetHook)
+
+class DisciplineHook(ModelAdmin):
+    model = Discipline
+    base_url_path = "disciplinehook"
+    menu_label = "Discipline"
+    menu_icon = "list-ul"
+    menu_order = 280
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('name',)
+modeladmin_register(DisciplineHook)
+
+class DisciplineMembershipHook(ModelAdmin):
+    model = DisciplineMembership
+    base_url_path = "disciplinemembershiphook"
+    menu_label = "Discipline Membership"
+    menu_icon = "list-ul"
+    menu_order = 290
+    add_to_settings_menu = True
+    add_to_admin_menu = True
+    list_display = ('discipline', 'archer',)
+modeladmin_register(DisciplineMembershipHook)
