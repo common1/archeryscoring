@@ -125,3 +125,12 @@ class DisciplineMembershipHook
 ```bash
 ```
 
+## Chapter 012 - Define a ModelAdminGroup to group all the modeling related admin views
+
+```
+modeling\wagtail_hooks.py
+```
+
+```bash
+```
+
