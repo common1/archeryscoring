@@ -49,9 +49,9 @@ class Archer(BaseModel):
     )
     slug = AutoSlugField(populate_from='last_name',editable=True)
     union_number = models.PositiveIntegerField(
-        null=True,
         unique=True,
-        blank=True,
+        null=True,
+        blank=False,
         verbose_name=_("union number of archer"),
         help_text=_("format: not required")
     )
@@ -167,7 +167,7 @@ class Archer(BaseModel):
     ]
     
     class Meta:
-        db_table = 'archer'
+        db_table = 'archers'
         ordering = ['last_name']
         verbose_name = _("Archer")
         verbose_name_plural = _("Archers")
@@ -248,7 +248,7 @@ class Discipline(BaseModel):
     ]
     
     class Meta:
-        db_table = 'discipline'
+        db_table = 'disciplines'
         ordering = ['name']
         verbose_name = _("Discipline")
         verbose_name_plural = _("Disciplines")
@@ -297,7 +297,7 @@ class DisciplineMembership(BaseModel):
     )
 
     class Meta:
-        db_table = 'disciplinemembership'
+        db_table = 'disciplinememberships'
         ordering = ['discipline__name']
         verbose_name = _("Discipline Membership")
         verbose_name_plural = _("Discipline Memberships")
@@ -436,7 +436,7 @@ class Club(BaseModel):
     ]
     
     class Meta:
-        db_table = 'club'
+        db_table = 'clubs'
         ordering = ['name']
         verbose_name = _("Club")
         verbose_name_plural = _("Clubs")
@@ -529,7 +529,7 @@ class ClubMembership(BaseModel):
     ]
 
     class Meta:
-        db_table = 'clubmembership'
+        db_table = 'clubmemberships'
         ordering = ['start_date']
         verbose_name = _("Club Membership")
         verbose_name_plural = _("Club Memberships")
@@ -640,7 +640,7 @@ class AgeGroup(BaseModel):
     )
 
     class Meta:
-        db_table = 'agegroup'
+        db_table = 'agegroups'
         ordering = ['name']
         verbose_name = _("Age Group")
         verbose_name_plural = _("Age Groups")
@@ -720,7 +720,7 @@ class CategoryMembership(BaseModel):
     ]
 
     class Meta:
-        db_table = 'categorymembership'
+        db_table = 'categorymemberships'
         ordering = ['category__name']
         verbose_name = _("Category Membership")
         verbose_name_plural = _("Category Memberships")
@@ -771,7 +771,7 @@ class Team(BaseModel):
     )
 
     class Meta:
-        db_table = 'team'
+        db_table = 'teams'
         ordering = ['name']
         verbose_name = _("Team")
         verbose_name_plural = _("Teams")
@@ -846,7 +846,7 @@ class TeamMembership(BaseModel):
         ),
     ]   
     class Meta:
-        db_table = 'teammembership'
+        db_table = 'teammemberships'
         ordering = ['team__name']
         verbose_name = _("Team Membership")
         verbose_name_plural = _("Team Memberships")
@@ -928,7 +928,7 @@ class ScoringSheet(BaseModel):
     ]
     
     class Meta:
-        db_table = 'scoringsheet'
+        db_table = 'scoringsheets'
         ordering = ['name']
         verbose_name = _("Scoring Sheet")
         verbose_name_plural = _("Scoring Sheets")

@@ -159,5 +159,19 @@ Convert from ModelAdmin to ModelAdminGroup
 ```
 
 ```bash
+pip install pyclean
+pyclean .
+```
+
+## Chapter 015 - fill database
+
+```
+...
+Part 1
+def create_disciplines
+Discipline objects defined
+```
+
+```bash
 ```
 

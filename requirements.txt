@@ -2,3 +2,5 @@ Django>=5.2,<5.3
 wagtail>=7.2,<7.3
 django-extensions==4.1
 wagtail-modeladmin==2.2.0
+lorem-text==3.0
+pyclean==3.4.0

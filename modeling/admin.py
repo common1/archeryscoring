@@ -14,7 +14,7 @@ from .models import (
 
 @admin.register(Archer)
 class ArcherAdmin(admin.ModelAdmin):
-    list_display = ('union_number', 'last_name', 'first_name', 'middle_name')
+    list_display = ('last_name', 'first_name', 'middle_name', 'union_number',)
     list_display_links = ('last_name', 'first_name')
     list_per_page = 20
     ordering = ('last_name', 'first_name')
