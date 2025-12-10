@@ -934,10 +934,10 @@ class ScoringSheet(BaseModel):
         verbose_name_plural = _("Scoring Sheets")
 
     def __str__(self):
-        return f"{self.name} ( {self.dimension} )"
+        return f"{self.name} ( rows : {self.rows}, columns : {self.columns} )"
 
     def __unicode__(self):
-        return f"{self.name} ( {self.dimension} )"
+        return f"{self.name} ( rows : {self.rows}, columns : {self.columns} )"
 
 class TargetFace(BaseModel):
     pass

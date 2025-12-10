@@ -170,10 +170,25 @@ pyclean .
 Part 1
 def create_disciplines
 Discipline objects defined
-Par 2
+Part 2
 Discipline objects created
+Part 3
+def create_sample_archers adjusted
+def create_sample_clubs adjusted
+def create_sample_club_memberships
+def create_sample_disciplines
+def create_sample_discipline_memberships
+def create_sample_categories
+def create_sample_category_memberships
+def create_sample_teams
+def create_sample_team_memberships
+def create_sample_scoringsheets
 ```
 
 ```bash
+del db.sqlite3
+pyclean .
+python manage.py migrate
+python manage.py fill_db
 ```
 

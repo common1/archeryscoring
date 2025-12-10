@@ -40,7 +40,13 @@ class Command(BaseCommand):
         self.create_sample_archers()
         self.create_sample_clubs()
         self.create_sample_club_memberships()
-        self.create_disciplines()
+        self.create_sample_disciplines()
+        self.create_sample_discipline_memberships()
+        self.create_sample_categories()
+        self.create_sample_category_memberships()
+        self.create_sample_teams()
+        self.create_sample_team_memberships()
+        self.create_sample_scoringsheets()
 
     def create_sample_archers(self):
         archers = [
@@ -66,18 +72,11 @@ class Command(BaseCommand):
                 info=lorem_ipsum.paragraph(),
             ),
         ]
-        for _archer in archers:
-            new_archer = Archer.objects.filter(union_number=_archer.union_number)
-            if not new_archer:
-                new_archer = Archer.objects.create(
-                    first_name=_archer.first_name,
-                    last_name=_archer.last_name,
-                    union_number=_archer.union_number,
-                    info=_archer.info,
-                    author=_archer.author,
-                )
+        for archer in archers:
+            if not Archer.objects.filter(union_number=archer.union_number):
+                archer.save()
                 if SCREEN_OUTPUT:
-                    self.stdout.write(self.style.SUCCESS(f'Archer - {new_archer.first_name} {new_archer.last_name} created'))
+                    self.stdout.write(self.style.SUCCESS(f'Archer - {archer.first_name} {archer.last_name} created'))
 
     def create_sample_clubs(self):
         clubs = [
@@ -112,37 +111,31 @@ class Command(BaseCommand):
                 info=lorem_ipsum.paragraph(),
             ),
         ]
-        for _club in clubs:
-            new_club = Club.objects.filter(name=_club.name)
-            if not new_club:
-                new_club = Club.objects.create(
-                    author=_club.author,
-                    name=_club.name,
-                    town=_club.town,
-                    info=_club.info,
-                )
+        for club in clubs:
+            if not Club.objects.filter(name=club.name):
+                club.save()
                 if SCREEN_OUTPUT:
-                    self.stdout.write(self.style.SUCCESS(f'Club "{new_club.name} created" '))
+                    self.stdout.write(self.style.SUCCESS(f'Club "{club.name} created" '))
 
     def create_sample_club_memberships(self):
         for i in range (1,10):
             _club = random.choice(Club.objects.all())
             _archer = random.choice(Archer.objects.all())
-            new_club_membership = ClubMembership.objects.filter(
+            club_membership = ClubMembership.objects.filter(
                 archer=_archer,
                 club=_club,
             )
-            if not new_club_membership:
-                new_club_membership = ClubMembership.objects.create(
+            if not club_membership:
+                club_membership = ClubMembership.objects.create(
                     author=self.user,
                     club=_club,
                     archer=_archer,
                     info=lorem_ipsum.paragraph(),
                 )
                 if SCREEN_OUTPUT:
-                    self.stdout.write(self.style.SUCCESS(f'New ClubMembership created: Club - {new_club_membership.club.name} ; Archer - {new_club_membership.archer.first_name} {new_club_membership.archer.last_name}'))
+                    self.stdout.write(self.style.SUCCESS(f'New ClubMembership created: Club - {club_membership.club.name} ; Archer - {club_membership.archer.first_name} {club_membership.archer.last_name}'))
 
-    def create_disciplines(self):
+    def create_sample_disciplines(self):
         disciplines = [
             Discipline(
                 author=self.user,
@@ -195,153 +188,188 @@ class Command(BaseCommand):
                 info=lorem_ipsum.paragraph(),
             ),
         ]
-        for _discipline in disciplines:
-            new_discipline = Discipline.objects.filter(name=_discipline.name)
-            if not new_discipline:
-                new_discipline = Discipline.objects.create(
-                    author=_discipline.author,
-                    name=_discipline.name,
-                    info=_discipline.info,
+        for discipline in disciplines:
+            if not Discipline.objects.filter(name=discipline.name):
+                discipline.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Discipline "{discipline.name} created"'))
+
+    def create_sample_discipline_memberships(self):
+        for i in range(1, 10):
+            discipline = random.choice(Discipline.objects.all())
+            archer = random.choice(Archer.objects.all())
+            discipline_membership = DisciplineMembership.objects.filter(
+                archer=archer,
+                discipline=discipline,
+            )
+            if not discipline_membership:
+                discipline_membership = DisciplineMembership.objects.create(
+                    author=self.user,
+                    discipline=discipline,
+                    archer=archer,
+                    info=lorem_ipsum.paragraph(),
                 )
                 if SCREEN_OUTPUT:
-                    self.stdout.write(self.style.SUCCESS(f'Discipline "{new_discipline.name} created"'))
-
-        # # Create sample discipline memberships
-        # for archer in archers:
-        #     discipline = random.choice(Discipline.objects.all())
-        #     membership, created = DisciplineMembership.objects.get_or_create(
-        #         archer=archer,
-        #         discipline=discipline,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Archer "{archer.first_name} {archer.last_name}" {"added to" if created else "already in"} Discipline "{discipline.name}"'))
+                    self.stdout.write(self.style.SUCCESS(f'New DisciplineMembership created: Discipline - {discipline_membership.discipline.name} ; Archer - {discipline_membership.archer.first_name} {discipline_membership.archer.last_name}'))
+                
+    def create_sample_categories(self):
+        categories = [
+            Category(
+                author=self.user,
+                name="Recurve",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Category(
+                author=self.user,
+                name="Compound",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Category(
+                author=self.user,
+                name="Barebow",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Category(
+                author=self.user,
+                name="Longbow",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Category(
+                author=self.user,
+                name="Traditional",
+                info=lorem_ipsum.paragraph(),
+            ),
+        ]
+        for category in categories:
+            if not Category.objects.filter(name=category.name):
+                category.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Category - {category.name} created'))
+       
+    def create_sample_category_memberships(self):
+        for i in range(1, 10):
+            category = random.choice(Category.objects.all())
+            archer = random.choice(Archer.objects.all())
+            category_membership = CategoryMembership.objects.filter(
+                archer=archer,
+                category=category,
+            )
+            if not category_membership:
+                category_membership = CategoryMembership.objects.create(
+                    author=self.user,
+                    category=category,
+                    archer=archer,
+                    info=lorem_ipsum.paragraph(),
+                )
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'New CategoryMembership created: Category - {category_membership.category.name} ; Archer - {category_membership.archer.first_name} {category_membership.archer.last_name}'))                
         
-        # # Create sample catergories
-        # categories = [
-        #     'Olympic Recurve',
-        #     'Compound',
-        #     'Barebow',
-        #     'Longbow',
-        #     'Traditional',
-        # ]
-        # for _category in categories:
-        #     # Get or create category
-        #     category, created = Category.objects.get_or_create(
-        #         name=_category,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Category "{category.name}" {"created" if created else "already exists"}'))
+    def create_sample_teams(self):
+        teams = [
+            Team(
+                author=self.user,
+                name='The Archers',
+                info=lorem_ipsum.paragraph(),              
+            ),
+            Team(
+                author=self.user,
+                name='Bullseye Squad',
+                info=lorem_ipsum.paragraph(),              
+            ),
+            Team(
+                author=self.user,
+                name='Arrow Masters',
+                info=lorem_ipsum.paragraph(),              
+            ),
+            Team(
+                author=self.user,
+                name='Target Titans',
+                info=lorem_ipsum.paragraph(),              
+            ),
+            Team(
+                author=self.user,
+                name='Precision Crew',
+                info=lorem_ipsum.paragraph(),              
+            ),
+        ]
+        for team in teams:
+            if not Team.objects.filter(name=team.name):
+                team.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Team "{team.name} created"'))
+                         
+    def create_sample_team_memberships(self):
+        for i in range(1, 10):
+            team = random.choice(Team.objects.all())
+            archer = random.choice(Archer.objects.all())
+            team_membership = TeamMembership.objects.filter(
+                archer=archer,
+                team=team,
+            )
+            if not team_membership:
+                team_membership = TeamMembership.objects.create(
+                    author=self.user,
+                    team=team,
+                    archer=archer,
+                    info=lorem_ipsum.paragraph(),
+                )
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'New TeamMembership created: Discipline - {team_membership.team.name} ; Archer - {team_membership.archer.first_name} {team_membership.archer.last_name}'))
                 
-        # # Create sample category memberships
-        # for archer in archers:
-        #     category = random.choice(Category.objects.all())
-        #     membership, created = CategoryMembership.objects.get_or_create(
-        #         archer=archer,
-        #         category=category,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Archer "{archer.first_name} {archer.last_name}" {"added to" if created else "already in"} Category "{category.name}"'))
-
-        # self.stdout.write(self.style.SUCCESS('Database population complete.'))
-
-        # # Create sample Teams
-        # teams = [
-        #     'The Archers',
-        #     'Bullseye Squad',
-        #     'Arrow Masters',
-        #     'Target Titans',
-        #     'Precision Crew',
-        # ]
-        # for _team in teams:
-        #     # Get or create team
-        #     team, created = Team.objects.get_or_create(
-        #         name=_team,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Team "{team.name}" {"created" if created else "already exists"}'))
-                
-        # # Create sample team memberships
-        # for archer in archers:
-        #     team = random.choice(Team.objects.all())
-        #     membership, created = TeamMembership.objects.get_or_create(
-        #         archer=archer,
-        #         team=team,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Archer "{archer.first_name} {archer.last_name}" {"added to" if created else "already in"} Team "{team.name}"'))
-                
-
-
-
-
-
-
-
-
-
-        # # Create sample Scoringsheets        
-        # scoringsheets = [
-        #     ScoringSheet(
-        #         author=user,
-        #         name="Indoor 18 meter",
-        #         columns=3,
-        #         rows=10,
-        #         info=lorem.sentence()
-        #     ),
-        #     ScoringSheet(
-        #         author=user,
-        #         name="Indoor 25 meter",
-        #         columns=5,
-        #         rows=5,
-        #         info=lorem.sentence()
-        #     ),
-        #     ScoringSheet(
-        #         author=user,
-        #         name="Outdoor 30 meter",
-        #         columns=3,
-        #         rows=12,
-        #         info=lorem.sentence()
-        #     ),
-        #     ScoringSheet(
-        #         author=user,
-        #         name="Outdoor 30 meter",
-        #         columns=3,
-        #         rows=12,
-        #         info=lorem.sentence()
-        #     ),
-        #     ScoringSheet(
-        #         author=user,
-        #         name="Outdoor 50 meter",
-        #         columns=3,
-        #         rows=12,
-        #         info=lorem.sentence()
-        #     ),
-        # ]
-        # for _archer in archers:
-        #     # Get or create archer
-        #     archer, created = Archer.objects.get_or_create(
-        #         first_name=_archer.first_name,
-        #         last_name=_archer.last_name,
-        #         defaults={
-        #             'author': _archer.author,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Archer "{archer.first_name} {archer.last_name}" {"created" if created else "already exists"}'))
-        # # Get all archers
-        # archers = Archer.objects.all()
+    def create_sample_scoringsheets(self):
+        scoringsheets = [
+            ScoringSheet(
+                author=self.user,
+                name="Indoor 18 meter",
+                columns=3,
+                rows=10,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Indoor 25 meter",
+                columns=5,
+                rows=5,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Outdoor 30 meter",
+                columns=3,
+                rows=12,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Outdoor 50 meter",
+                columns=3,
+                rows=12,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Outdoor 60 meter",
+                columns=3,
+                rows=12,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Outdoor 70 meter",
+                columns=3,
+                rows=12,
+                info=lorem.sentence()
+            ),
+            ScoringSheet(
+                author=self.user,
+                name="Outdoor 90 meter",
+                columns=3,
+                rows=12,
+                info=lorem.sentence()
+            ),
+        ]        
+        for scoringsheet in scoringsheets:
+            if not ScoringSheet.objects.filter(name=scoringsheet.name):
+                scoringsheet.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Scoringsheet - {scoringsheet.name} created'))
