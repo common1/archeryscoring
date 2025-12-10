@@ -939,26 +939,58 @@ class ScoringSheet(BaseModel):
     def __unicode__(self):
         return f"{self.name} ( rows : {self.rows}, columns : {self.columns} )"
 
+# 122 cm
+# 80 cm
+# 60 cm
+# 40 cm
+# 20 cm
+class TargetDiameter(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
 class TargetFace(BaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        
 class Contest(BaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        
 class ContestMembership(BaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-class Result(BaseModel):
-    pass
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-class ResultMembership(BaseModel):
-    pass
+class Score(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+class ScoreMembership(BaseModel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 class Competition(BaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 class CompetitionMembership(BaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 # Wagtail Pages
 

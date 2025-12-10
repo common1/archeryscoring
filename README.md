@@ -173,16 +173,16 @@ Discipline objects defined
 Part 2
 Discipline objects created
 Part 3
-def create_sample_archers adjusted
-def create_sample_clubs adjusted
-def create_sample_club_memberships
-def create_sample_disciplines
-def create_sample_discipline_memberships
-def create_sample_categories
-def create_sample_category_memberships
-def create_sample_teams
-def create_sample_team_memberships
-def create_sample_scoringsheets
+def create_sample_archers adjusted(self)
+def create_sample_clubs adjusted(self)
+def create_sample_club_memberships(self)
+def create_sample_disciplines(self)
+def create_sample_discipline_memberships(self)
+def create_sample_categories(self)
+def create_sample_category_memberships(self)
+def create_sample_teams(self)
+def create_sample_team_memberships(self)
+def create_sample_scoringsheets(self)
 ```
 
 ```bash
@@ -190,5 +190,25 @@ del db.sqlite3
 pyclean .
 python manage.py migrate
 python manage.py fill_db
+```
+
+## Chapter 016 - extend modeling.models
+
+See also:
+[https://dev.to/atifwattoo/how-to-create-an-image-model-in-django-with-settings-1le3]
+
+```
+Part 1
+class TargetDiameters(BaseModel)
+class TargetFace(BaseModel)
+class Contest(BaseModel)
+class ContestMembership(BaseModel)
+class Score(BaseModel)
+class ScoreMembership(BaseModel)
+class Competition(BaseModel)
+class CompetitionMembership(BaseModel)
+```
+
+```bash
 ```
 
