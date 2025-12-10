@@ -40,6 +40,7 @@ class Command(BaseCommand):
         self.create_sample_archers()
         self.create_sample_clubs()
         self.create_sample_club_memberships()
+        self.create_disciplines()
 
     def create_sample_archers(self):
         archers = [
@@ -194,17 +195,16 @@ class Command(BaseCommand):
                 info=lorem_ipsum.paragraph(),
             ),
         ]
-
-        # for _discipline in disciplines:
-        #     # Get or create discipline
-        #     discipline, created = Discipline.objects.get_or_create(
-        #         name=_discipline,
-        #         defaults={
-        #             'author': user,
-        #         }
-        #     )
-        #     if SCREEN_OUTPUT:
-        #         self.stdout.write(self.style.SUCCESS(f'Discipline "{discipline.name}" {"created" if created else "already exists"}'))
+        for _discipline in disciplines:
+            new_discipline = Discipline.objects.filter(name=_discipline.name)
+            if not new_discipline:
+                new_discipline = Discipline.objects.create(
+                    author=_discipline.author,
+                    name=_discipline.name,
+                    info=_discipline.info,
+                )
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Discipline "{new_discipline.name} created"'))
 
         # # Create sample discipline memberships
         # for archer in archers:

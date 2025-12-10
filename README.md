@@ -170,6 +170,8 @@ pyclean .
 Part 1
 def create_disciplines
 Discipline objects defined
+Par 2
+Discipline objects created
 ```
 
 ```bash
