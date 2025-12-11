@@ -13,6 +13,8 @@ class ArcheryMaterialsBaseModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     modified_at = models.DateTimeField(auto_now=True)
 
+    is_active = models.BooleanField(default=True)
+    
     class Meta:
         abstract = True
 
@@ -54,21 +56,6 @@ class BowType(ArcheryMaterialsBaseModel):
         verbose_name=_("author of bowtype"),
         help_text=_("format: required, default=1 (superuser)"),
     )
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('info'),
-        FieldPanel('archers'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
-
 
     class Meta:
         db_table = 'bowtype'
@@ -122,22 +109,6 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         verbose_name=_("author of bowtypemembership"),
         help_text=_("format: required, default=1 (superuser)"),
     )
-
-    # Extra fields for membership information end
-
-    panels = [
-        FieldPanel('bowtype'),
-        FieldPanel('archer'),
-        FieldPanel('info'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
 
     class Meta:
         db_table = 'bowtypemembership'

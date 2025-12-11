@@ -207,6 +207,9 @@ class Score(BaseModel)
 class ScoreMembership(BaseModel)
 class Competition(BaseModel)
 class CompetitionMembership(BaseModel)
+Part 2
+Apps: archery_materials, modeling 
+Moving panels sections from all models in models.py to admin.py
 ```
 
 ```bash

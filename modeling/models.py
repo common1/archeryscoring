@@ -14,6 +14,8 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     modified_at = models.DateTimeField(auto_now=True)
 
+    is_active = models.BooleanField(default=True)
+
     class Meta:
         abstract = True
 
@@ -136,36 +138,7 @@ class Archer(BaseModel):
     )
     
     # Extra fields for archer information end
-    
-    panels = [
-        FieldPanel('union_number'),
-        FieldPanel('last_name'),
-        FieldPanel('first_name'),
-        FieldPanel('middle_name'),
-        FieldPanel('info'),
-        MultiFieldPanel(
-            [
-                FieldPanel('email'),
-                FieldPanel('phone'),
-                FieldPanel('address'),
-                FieldPanel('city'),
-                FieldPanel('zip_code'),
-                FieldPanel('province'),
-            ],
-            heading = "Contact Information",
-            classname="collapsible collapsed",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('birth_date'),
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
-    
+       
     class Meta:
         db_table = 'archers'
         ordering = ['last_name']
@@ -233,20 +206,6 @@ class Discipline(BaseModel):
         help_text=_("format: required, default=1 (superuser)"),
     )
 
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('info'),
-        FieldPanel('archers'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
-    
     class Meta:
         db_table = 'disciplines'
         ordering = ['name']
@@ -280,6 +239,7 @@ class DisciplineMembership(BaseModel):
         help_text=_("format: required"),
         related_name='disciplinemembership_archer'
     )
+    slug = AutoSlugField(populate_from=('archer__last_name', 'discipline__name'), editable=True)
     info = models.TextField(
         null=True,
         blank=True,
@@ -407,33 +367,6 @@ class Club(BaseModel):
     )
      
     # Extra fields for club information end        
-
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('info'),
-        FieldPanel('archers'),
-        MultiFieldPanel(
-            [
-                FieldPanel('address'),
-                FieldPanel('zip_code'),
-                FieldPanel('town'),
-                FieldPanel('phone'),
-                FieldPanel('email'),
-                FieldPanel('website'),
-                FieldPanel('social_media'),
-            ],
-            heading = "Contact Information",
-            classname="collapsible collapsed",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
     
     class Meta:
         db_table = 'clubs'
@@ -506,28 +439,6 @@ class ClubMembership(BaseModel):
 
     # Extra fields for membership information end
 
-    panels = [
-        FieldPanel('club'),
-        FieldPanel('archer'),
-        MultiFieldPanel(
-            [
-                FieldPanel('start_date'),
-                FieldPanel('end_date'),
-            ],
-            heading = "Information",
-            classname="collapsible collapsed",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-        FieldPanel('info'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
-
     class Meta:
         db_table = 'clubmemberships'
         ordering = ['start_date']
@@ -584,20 +495,6 @@ class Category(BaseModel):
         help_text=_("format: required, default=1 (superuser)"),
     )
     
-    panels = [
-        FieldPanel('name'),
-        FieldPanel('info'),
-        FieldPanel('archers'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
-
     class Meta:
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
@@ -703,21 +600,6 @@ class CategoryMembership(BaseModel):
     )
 
     # Extra fields for membership information end
-
-    panels = [
-        FieldPanel('category'),
-        FieldPanel('archer'),
-        FieldPanel('agegroup'),
-        FieldPanel('info'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
 
     class Meta:
         db_table = 'categorymemberships'
@@ -832,19 +714,6 @@ class TeamMembership(BaseModel):
 
     # Extra fields for teammembership information end
 
-    panels = [
-        FieldPanel('team'),
-        FieldPanel('archer'),
-        FieldPanel('info'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]   
     class Meta:
         db_table = 'teammemberships'
         ordering = ['team__name']
@@ -909,23 +778,6 @@ class ScoringSheet(BaseModel):
         verbose_name=_("author of scoring sheet"),
         help_text=_("format: required, default=1 (superuser)"),
     )
-    
-    panels = [  
-        FieldPanel('name'),
-        FieldRowPanel([
-            FieldPanel('columns'),
-            FieldPanel('rows'),            
-        ]),
-        FieldPanel('info'),
-        MultiFieldPanel(
-            [
-                FieldPanel('slug'),
-                FieldPanel('author'),
-            ],
-            heading = "Extra Information",
-            classname="collapsible collapsed",
-        ),
-    ]
     
     class Meta:
         db_table = 'scoringsheets'
