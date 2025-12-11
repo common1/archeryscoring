@@ -192,7 +192,7 @@ python manage.py migrate
 python manage.py fill_db
 ```
 
-## Chapter 016 - extend modeling.models
+## Chapter 016 - Extend modeling.models
 
 See also:
 [https://dev.to/atifwattoo/how-to-create-an-image-model-in-django-with-settings-1le3]
@@ -214,4 +214,16 @@ Moving panels sections from all models in models.py to admin.py
 
 ```bash
 ```
+
+## Chapter 017 - Extra model definitions
+
+```
+archery_materials.models
+
+
+```
+
+```bash
+```
+
 

@@ -18,7 +18,7 @@ class ArcheryMaterialsBaseModel(models.Model):
     class Meta:
         abstract = True
 
-#Wooden, Recurve, Longbow, Compound
+# Compound, Recurve, Longbow, Crossbow
 class BowType(ArcheryMaterialsBaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -121,3 +121,67 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
     def __unicode__(self):
         return f"{str(self.archer)} - {str(self.bowtype)}"
 
+class Sight(ArcheryMaterialsBaseModel):
+    pass
+
+class Stabilizer(ArcheryMaterialsBaseModel):
+    pass
+
+class Arrow(ArcheryMaterialsBaseModel):
+    pass
+
+class Clicker(ArcheryMaterialsBaseModel):
+    pass
+
+class Plunger(ArcheryMaterialsBaseModel):
+    pass
+
+class FingerTab(ArcheryMaterialsBaseModel):
+    pass
+
+class ArmGuard(ArcheryMaterialsBaseModel):
+    pass
+
+class ChestGuard(ArcheryMaterialsBaseModel):
+    pass
+
+# Back quiver
+# Hip Quiver
+# Field Quiver
+# Detachable Quiver
+# Bow-Mounted Quiver
+class QuiverType(ArcheryMaterialsBaseModel):
+    pass
+
+class Quiver(ArcheryMaterialsBaseModel):
+    pass
+
+class LimbType(ArcheryMaterialsBaseModel):
+    pass
+
+class Limb(ArcheryMaterialsBaseModel):
+    pass
+
+class RiserType(ArcheryMaterialsBaseModel):
+    pass
+
+class Riser(ArcheryMaterialsBaseModel):
+    pass
+
+class Bow(ArcheryMaterialsBaseModel):
+    pass
+
+class StringMaterial(ArcheryMaterialsBaseModel):
+    pass
+
+class ArrowRestType(ArcheryMaterialsBaseModel):
+    pass
+
+class ArrowRest(ArcheryMaterialsBaseModel):
+    pass
+
+class NockingPoint(ArcheryMaterialsBaseModel):
+    pass
+
+class Equipment(ArcheryMaterialsBaseModel):
+    pass

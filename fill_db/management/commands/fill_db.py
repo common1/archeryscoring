@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from users.models import User
 from django.utils import lorem_ipsum
+
 from modeling.models import (
     Archer, 
     Club,
@@ -17,6 +18,11 @@ from modeling.models import (
     Team,
     TeamMembership,
     ScoringSheet,
+)
+
+from archery_materials.models import (
+    BowType,
+    BowTypeMembership,
 )
 
 SCREEN_OUTPUT = True
@@ -37,6 +43,7 @@ class Command(BaseCommand):
     help = 'Populate the database with sample data'
     
     def handle(self, *args, **kwargs):
+        # modeling app - begin
         self.create_sample_archers()
         self.create_sample_clubs()
         self.create_sample_club_memberships()
@@ -47,6 +54,14 @@ class Command(BaseCommand):
         self.create_sample_teams()
         self.create_sample_team_memberships()
         self.create_sample_scoringsheets()
+        # modeling app - begin
+        
+        # archery_materials app - begin
+        self.create_sample_bowtypes()
+        self.create_sample_bowtype_memberships()
+        # archery_materials app - end      
+
+    # modeling app - begin
 
     def create_sample_archers(self):
         archers = [
@@ -373,3 +388,56 @@ class Command(BaseCommand):
                 scoringsheet.save()
                 if SCREEN_OUTPUT:
                     self.stdout.write(self.style.SUCCESS(f'Scoringsheet - {scoringsheet.name} created'))
+
+    # modeling app - end
+
+    # archery_materials app - begin
+
+    def create_sample_bowtypes(self):
+        bowtypes = [
+            BowType(
+                author=self.user,
+                name="Compound", 
+                info=lorem_ipsum.paragraph(),
+            ),
+            BowType(
+                author=self.user,
+                name="Crossbow", 
+                info=lorem_ipsum.paragraph(),
+            ),
+            BowType(
+                author=self.user,
+                name="Longbow", 
+                info=lorem_ipsum.paragraph(),
+            ),
+            BowType(
+                author=self.user,
+                name="Recurve", 
+                info=lorem_ipsum.paragraph(),
+            ),
+        ]
+        for bowtype in bowtypes:
+            if not BowType.objects.filter(name=bowtype.name):
+                bowtype.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'BowType "{bowtype.name} created" '))
+
+    def create_sample_bowtype_memberships(self):
+        for i in range (1,10):
+            bowtype = random.choice(BowType.objects.all())
+            archer = random.choice(Archer.objects.all())
+            bowtype_membership = BowTypeMembership.objects.filter(
+                archer=archer,
+                bowtype=bowtype,
+            )
+            if not bowtype_membership:
+                bowtype_membership = BowTypeMembership.objects.create(
+                    author=self.user,
+                    bowtype=bowtype,
+                    archer=archer,
+                    info=lorem_ipsum.paragraph(),
+                )
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'New BowTypeMembership created: BowType - {bowtype_membership.bowtype.name} ; Archer - {bowtype_membership.archer.first_name} {bowtype_membership.archer.last_name}'))
+    
+    # archery_materials app - end      
