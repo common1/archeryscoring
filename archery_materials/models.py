@@ -10,6 +10,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from modeling.models import Archer
 
 class ArcheryMaterialsBaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -23,7 +25,6 @@ class BowType(ArcheryMaterialsBaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=32,
         null=False,
@@ -73,7 +74,6 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     bowtype = models.ForeignKey(
         BowType,
         on_delete=models.PROTECT,
@@ -122,28 +122,32 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         return f"{str(self.archer)} - {str(self.bowtype)}"
 
 class Sight(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Stabilizer(ArcheryMaterialsBaseModel):
-    pass
-
-class Arrow(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Clicker(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Plunger(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class FingerTab(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class ArmGuard(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class ChestGuard(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 # Back quiver
 # Hip Quiver
@@ -151,37 +155,50 @@ class ChestGuard(ArcheryMaterialsBaseModel):
 # Detachable Quiver
 # Bow-Mounted Quiver
 class QuiverType(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Quiver(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class LimbType(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Limb(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class RiserType(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Riser(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Bow(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class StringMaterial(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class ArrowRestType(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class ArrowRest(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class NockingPoint(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class Equipment(ArcheryMaterialsBaseModel):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+

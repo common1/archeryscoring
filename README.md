@@ -188,6 +188,7 @@ def create_sample_scoringsheets(self)
 ```bash
 del db.sqlite3
 pyclean .
+python manage.py makemigrations
 python manage.py migrate
 python manage.py fill_db
 ```
@@ -218,10 +219,13 @@ Moving panels sections from all models in models.py to admin.py
 ## Chapter 017 - Extra model definitions
 
 ```
+Part 1
 archery_materials.models
-
-
-```
+Part 2
+In archery_materials.models.py
+Move id definition to ArcheryMaterialsBaseModel
+In modeling.models.py
+Move id definition to BaseModel
 
 ```bash
 ```

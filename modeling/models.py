@@ -11,6 +11,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from wagtail.models import Page
 
 class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -22,9 +24,7 @@ class BaseModel(models.Model):
 class Archer(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self._meta.get_field('slug').populate_from = 'last_name'
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     last_name = models.CharField(
         max_length=64,
         null=False,
@@ -170,9 +170,7 @@ class Archer(BaseModel):
 class Discipline(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self._meta.get_field('slug').populate_from = 'name'
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=64,
         null=False,
@@ -222,7 +220,6 @@ class DisciplineMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     discipline = models.ForeignKey(
         Discipline,
         on_delete=models.PROTECT,
@@ -273,7 +270,6 @@ class Club(BaseModel):
         super().__init__(*args, **kwargs)
         # self._meta.get_field('slug').populate_from = 'name'
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=64,
         null=False,
@@ -384,7 +380,6 @@ class ClubMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     club = models.ForeignKey(
         Club,
         on_delete=models.PROTECT,
@@ -461,7 +456,6 @@ class Category(BaseModel):
         super().__init__(*args, **kwargs)
         # self._meta.get_field('slug').populate_from = 'name'
         
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=64,
         null=False,
@@ -510,7 +504,6 @@ class AgeGroup(BaseModel):
         super().__init__(*args, **kwargs)
         # self._meta.get_field('slug').populate_from = 'name'
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=32,
         null=False,
@@ -552,7 +545,6 @@ class CategoryMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     category = models.ForeignKey(
         Category,
         on_delete=models.PROTECT,
@@ -618,7 +610,6 @@ class Team(BaseModel):
         super().__init__(*args, **kwargs)
         # self._meta.get_field('slug').populate_from = 'name'
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=64,
         null=False,
@@ -668,11 +659,6 @@ class TeamMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(
-        primary_key=True, 
-        default=uuid.uuid4, 
-        editable=False
-    )
     team = models.ForeignKey(
         Team,
         on_delete=models.PROTECT,
@@ -734,7 +720,6 @@ class ScoringSheet(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
         max_length=64,
         null=False,
@@ -800,49 +785,33 @@ class TargetDiameter(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
 class TargetFace(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         
 class Contest(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        
 class ContestMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 class Score(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
 class ScoreMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 class Competition(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
 class CompetitionMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
 # Wagtail Pages
 
