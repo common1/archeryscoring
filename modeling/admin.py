@@ -846,6 +846,14 @@ class DisciplineSnippetViewSet(SnippetViewSet):
         ),
     ]
 
+# TODO: Finish TargetFaceNameChoiceSnippetViewSet
+class TargetFaceNameChoiceSnippetViewSet(SnippetViewSet):
+    model = TargetFaceNameChoice
+
+# TODO: Finish TargetFaceSnippetViewSet
+class TargetFaceSnippetViewSet(SnippetViewSet):
+    model = TargetFace
+
 class DisciplineMembershipSnippetViewSet(SnippetViewSet):
     model = DisciplineMembership
     menu_label = "Discipline Memberships"

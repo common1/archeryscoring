@@ -946,9 +946,142 @@ class Contest(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    name = models.CharField(
+        max_length=64,
+        null=False,
+        unique=True,
+        blank=False,
+        default='',
+        verbose_name=_("Name"),
+        help_text=_("format: required, max-64")
+    )
+    slug = AutoSlugField(
+        populate_from='name',
+        editable=True
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("Start date"),
+        help_text=_("format: Y-m-d, not required"),
+    )
+    start_time = models.TimeField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("Start time"),
+        help_text=_("format: H:M:S, not required"),
+    )
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("End date"),
+        help_text=_("format: Y-m-d, not required"),
+    )
+    end_time = models.TimeField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("End time"),
+        help_text=_("format: H:M:S, not required"),
+    )
+    # TODO: Insert location
+    archers = models.ManyToManyField(
+        Archer,
+        through='ContestMembership',
+        blank=True,
+        help_text=_("format: not required"),
+        related_name='contest_archers',
+        verbose_name=_("Archers"),
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("Info"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='author_contest',
+        verbose_name=_("Author"),
+        help_text=_("format: not required, default=1 (superuser)"),
+    )
+
+    class Meta:
+        db_table = 'contests'
+        ordering = ['name']
+        verbose_name = _("Contest")
+        verbose_name_plural = _("Contests")
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):       
+        return self.name
+
 class ContestMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    contest = models.ForeignKey(
+        Contest,
+        on_delete=models.PROTECT,
+        unique=False,
+        default=1,
+        verbose_name=_("Contest"),
+        help_text=_("format: required"),
+        related_name='contest_membership'
+    )
+    archer = models.ForeignKey(
+        Archer,
+        on_delete=models.PROTECT,
+        unique=False,
+        default=1,
+        verbose_name=_("Archer"),
+        help_text=_("format: required"),
+        related_name='archer_contest_membership'
+    )
+    slug = AutoSlugField(
+        populate_from=('archer__last_name', 'contest__name'), 
+        editable=True
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("Info"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='author_contest_membership',
+        verbose_name=_("Author"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+
+    class Meta:
+        db_table = 'contestmemberships'
+        ordering = ['contest__name']
+        verbose_name = _("Contest Membership")
+        verbose_name_plural = _("Contest Memberships")
+
+    def __str__(self):
+        return f"{str(self.archer)} - {str(self.contest)}"
+
+    def __unicode__(self):
+        return f"{str(self.archer)} - {str(self.contest)}"
+
 
 class Score(BaseModel):
     def __init__(self, *args, **kwargs):

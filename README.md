@@ -248,7 +248,10 @@ Finish
 ## Chapter 019 - verbose_name adjustment
 
 ```
+Part 1
 Adjust ment of verbose_name models
+Part 2
+Minor changes, does not work yet
 ```
 
 ```bash
