@@ -231,5 +231,19 @@ modeling.models.py, modeling.admin.py
 
 ```bash
 ```
+## Chapter 018 - Finish objects
+
+```
+Part 1
+modeling.models
+Finish TargetFaceNameChoice, TargetFace
+modeling.admin
+Finish TargetFaceNameChoiceAdmin
+Finish 
+```
+
+```bash
+```
+
 
 

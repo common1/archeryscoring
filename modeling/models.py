@@ -779,29 +779,6 @@ class ScoringSheet(BaseModel):
     def __unicode__(self):
         return f"{self.name} ( rows : {self.rows}, columns : {self.columns} )"
 
-# ENVIRONMENT
-# -------------------
-# Indoor
-# Outdoor
-
-# DISCIPLINE
-# ------------------
-# Target Archery
-# Field Archery
-# 3D Archery
-
-# TARGETSIZE
-# 122 cm
-# 80 cm
-# 60 cm
-# 40 cm
-# 20 cm
-
-# KEYFEATURE
-# 5-Zone
-# 10-Zone
-# 3-Spot
-
 class TargetFaceNameChoice(BaseModel):
     ENVIRONMENTS = [
         ('Indoor', 'Indoor'),
@@ -811,22 +788,24 @@ class TargetFaceNameChoice(BaseModel):
     DISCIPLINES = [
         ('Target Archery', 'Target Archery'),
         ('Field Archery', 'Field Archery'),
-        ('3D Archery', '3D Archery'),
     ]
     
     TARGETSIZES = [
-        ('122', '122'),
-        ('80', '80'),
-        ('60', '60'),
-        ('40', '40'),
-        ('30', '30'),
-        ('20', '20'),
+        ('122 cm', '122 cm'),
+        ('80 cm', '80 cm'),
+        ('65 cm', '65 cm'),
+        ('60 cm', '60 cm'),
+        ('50 cm', '50 cm'),
+        ('40 cm', '40 cm'),
+        ('35 cm', '30 cm'),
+        ('30 cm', '30 cm'),
+        ('20 cm', '20 cm'),
     ]
     
     KEYFEATURES = [
         ('5-Zone', '5-Zone'),
+        ('6-Zone', '6-Zone'),
         ('10-Zone', '10-Zone'),
-        ('3D', '3D'),
     ]
     
     def __init__(self, *args, **kwargs):
@@ -835,16 +814,16 @@ class TargetFaceNameChoice(BaseModel):
     name = models.CharField(
         max_length=128,
         null=False,
-        unique=True,
+        unique=False,
         blank=False,
         verbose_name=_("Name"),
-        help_text=_("format: required, max-128")
+        help_text=_("format: generated, max-128")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
     environment = models.CharField(
         max_length=32,
         null=False,
-        unique=True,
+        unique=False,
         blank=False,
         choices=ENVIRONMENTS,
         verbose_name=_("Environment"),
@@ -853,7 +832,7 @@ class TargetFaceNameChoice(BaseModel):
     discipline = models.CharField(
         max_length=32,
         null=False,
-        unique=True,
+        unique=False,
         blank=False,
         choices=DISCIPLINES,
         verbose_name=_("Discipline"),
@@ -862,7 +841,7 @@ class TargetFaceNameChoice(BaseModel):
     targetsize = models.CharField(
         max_length=32,
         null=False,
-        unique=True,
+        unique=False,
         blank=False,
         choices=TARGETSIZES,
         verbose_name=_("Target size"),
@@ -871,7 +850,7 @@ class TargetFaceNameChoice(BaseModel):
     keyfeature = models.CharField(
         max_length=32,
         null=False,
-        unique=True,
+        unique=False,
         blank=False,
         choices=KEYFEATURES,
         verbose_name=_("Key feature"),
@@ -900,6 +879,12 @@ class TargetFaceNameChoice(BaseModel):
         verbose_name = _("Target Face Name Choice")
         verbose_name_plural = _("Target Faces Name Choices")
 
+    def save(self, *args, **kwargs):
+        if self.environment and self.discipline and self.targetsize and self.keyfeature:
+            self.name = f"{self.environment} {self.discipline} {self.targetsize} {self.keyfeature}"
+
+        super(TargetFaceNameChoice, self).save(*args, **kwargs)
+        
     def __str__(self):
         return f"{self.name} )"
 
@@ -908,22 +893,30 @@ class TargetFaceNameChoice(BaseModel):
 
 def get_choices():
     result=[]
-    
-    # Fill list
+    # choices = TargetFaceNameChoice.objects.all()
+    # for choice in choices:
+    #     result.append((choice.name, choice.name),)
 
     return result
     
 class TargetFace(BaseModel):
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, *args, **kwargs):        
         super().__init__(*args, **kwargs)
+        
+    def get_choices():
+        names = []
+        choices = TargetFaceNameChoice.objects.all()
+        for choice in choices:
+            names.append((choice.name, choice.name),)
+        return names
 
     name = models.CharField(
-        default="name of targetface",
         max_length=64,
         null=False,
         unique=False,
         blank=False,
-        choices=get_choices(),
+        choices=get_choices,
         verbose_name=_("targetface name"),
         help_text=_("format: required, max-64")
     )
@@ -935,6 +928,14 @@ class TargetFace(BaseModel):
         unique=False,
         verbose_name=_("targetface information"),
         help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='targetface_author',
+        verbose_name=_("author of TargetFace"),
+        help_text=_("format: required, default=1 (superuser)"),
     )
 
     class Meta:

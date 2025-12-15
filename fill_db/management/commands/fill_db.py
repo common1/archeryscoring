@@ -56,6 +56,8 @@ class Command(BaseCommand):
         self.create_sample_teams()
         self.create_sample_team_memberships()
         self.create_sample_scoringsheets()
+        self.create_target_face_name_choices()
+        self.create_target_faces()
         # modeling app - begin
         
         # archery_materials app - begin
@@ -391,38 +393,82 @@ class Command(BaseCommand):
                 if SCREEN_OUTPUT:
                     self.stdout.write(self.style.SUCCESS(f'Scoringsheet - {scoringsheet.name} created'))
 
-    # ENVIRONMENT
-    # -------------------
-    # Indoor
-    # Outdoor
-
-    # DISCIPLINE
-    # ------------------
-    # Target Archery
-    # Field Archery
-    # 3D Archery
-
-    # TARGETSIZE
-    # 122 cm
-    # 80 cm
-    # 60 cm
-    # 40 cm
-    # 20 cm
-
-    # KEYFEATURE
-    # 5-Zone
-    # 10-Zone
-    # 3-Spot
-    
+    # TODO: Finish create_target_face_name_choices
     def create_target_face_name_choices(self):
         targetfacenamechoices = [
             TargetFaceNameChoice(
                 author=self.user,
-                title="",
-                info="",
+                environment="Indoor",
+                discipline="Target Archery",
+                targetsize="40 cm",
+                keyfeature="10-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Indoor",
+                discipline="Target Archery",
+                targetsize="60 cm",
+                keyfeature="10-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Target Archery",
+                targetsize="122 cm",
+                keyfeature="10-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Target Archery",
+                targetsize="80 cm",
+                keyfeature="10-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Field Archery",
+                targetsize="80 cm",
+                keyfeature="6-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Field Archery",
+                targetsize="60 cm",
+                keyfeature="6-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Field Archery",
+                targetsize="40 cm",
+                keyfeature="6-Zone",
+                info=lorem_ipsum.paragraph(),
+            ),
+            TargetFaceNameChoice(
+                author=self.user,
+                environment="Outdoor",
+                discipline="Field Archery",
+                targetsize="20 cm",
+                keyfeature="6-Zone",
+                info=lorem_ipsum.paragraph(),
             ),
         ]
+        for targetfacenamechoice in targetfacenamechoices:
+            new_name = f"{targetfacenamechoice.environment} {targetfacenamechoice.discipline} {targetfacenamechoice.targetsize} {targetfacenamechoice.keyfeature}"
+            if not TargetFaceNameChoice.objects.filter(name=new_name):
+                targetfacenamechoice.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'TargetFaceNameChoice "{targetfacenamechoice.name} created" '))
     
+    # TODO: Finish create_target_faces
     def create_target_faces(self):
         pass
 

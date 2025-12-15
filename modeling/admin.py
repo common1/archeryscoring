@@ -449,6 +449,7 @@ class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
     list_display_links=('name',)
     list_per_page=20
     ordering=('name',)
+    readonly_fields=('name',)
     fieldsets = (
         (None, {
             'fields': (
@@ -473,7 +474,28 @@ class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
 
 @admin.register(TargetFace)
 class TargetFace(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'slug', 
+                'author', 
+            ),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+    search_fields = ('name', 'info')
 
 # TODO: Here
 
