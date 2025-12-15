@@ -15,6 +15,8 @@ from modeling.models import (
     DisciplineMembership,
     Category,
     CategoryMembership,
+    TargetFaceNameChoice,
+    TargetFace,
     Team,
     TeamMembership,
     ScoringSheet,
@@ -388,6 +390,41 @@ class Command(BaseCommand):
                 scoringsheet.save()
                 if SCREEN_OUTPUT:
                     self.stdout.write(self.style.SUCCESS(f'Scoringsheet - {scoringsheet.name} created'))
+
+    # ENVIRONMENT
+    # -------------------
+    # Indoor
+    # Outdoor
+
+    # DISCIPLINE
+    # ------------------
+    # Target Archery
+    # Field Archery
+    # 3D Archery
+
+    # TARGETSIZE
+    # 122 cm
+    # 80 cm
+    # 60 cm
+    # 40 cm
+    # 20 cm
+
+    # KEYFEATURE
+    # 5-Zone
+    # 10-Zone
+    # 3-Spot
+    
+    def create_target_face_name_choices(self):
+        targetfacenamechoices = [
+            TargetFaceNameChoice(
+                author=self.user,
+                title="",
+                info="",
+            ),
+        ]
+    
+    def create_target_faces(self):
+        pass
 
     # modeling app - end
 

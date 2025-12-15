@@ -8,14 +8,32 @@ from .models import (
     CategoryMembership,
     Discipline,
     DisciplineMembership,
+    TargetFaceNameChoice,
+    TargetFace,
     Team,
     TeamMembership,
     ScoringSheet,
 )
 
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
+from wagtail.snippets.models import register_snippet
+from wagtail.admin.ui.tables import BooleanColumn
+from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
+
+
+@admin.action(description="Activate selected Archers")
+def activate_archers(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Archers")
+def deactivate_archers(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(Archer)
 class ArcherAdmin(admin.ModelAdmin):
-    list_display = ('last_name', 'first_name', 'middle_name', 'union_number',)
+    actions=[activate_archers, deactivate_archers]
+    list_display = ('last_name', 'first_name', 'middle_name', 'union_number', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('last_name', 'first_name')
     list_per_page = 20
     ordering = ('last_name', 'first_name')
@@ -31,12 +49,26 @@ class ArcherAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('birth_date', 'slug', 'author'),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
-    search_fields = ('last_name', 'first_name', 'middle_name')
+    search_fields = ('last_name', 'first_name', 'info')
+
+@admin.action(description="Activate selected Age Groups")
+def activate_agegroups(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Age Groups")
+def deactivate_agegroups(modeladmin, request, queryset):
+    queryset.update(is_active=False)
 
 @admin.register(AgeGroup)
 class AgeGroupAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    actions=[activate_agegroups, deactivate_agegroups]
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -51,8 +83,20 @@ class AgeGroupAdmin(admin.ModelAdmin):
                 'author', 
             ),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name', 'info')
+
+@admin.action(description="Activate selected Clubs")
+def activate_clubs(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Clubs")
+def deactivate_clubs(modeladmin, request, queryset):
+    queryset.update(is_active=False)
 
 class ClubMembershipInline(admin.TabularInline):
     model = ClubMembership
@@ -60,13 +104,15 @@ class ClubMembershipInline(admin.TabularInline):
     fields = ('archer', 'start_date', 'end_date')
     can_delete = False
     show_change_link = True
-
+    
 @admin.register(Club)
 class ClubAdmin(admin.ModelAdmin):
+    actions=[activate_clubs, deactivate_clubs]
     inlines = [
         ClubMembershipInline
     ]
-    list_display = ('name', 'town')
+    list_display = ('name', 'town', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name', 'town')
     list_per_page = 20
     ordering = ('name',)
@@ -90,12 +136,26 @@ class ClubAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author'),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name', 'town')
 
+@admin.action(description="Activate selected Club Memberships")
+def activate_clubmemberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Club Memberships")
+def deactivate_clubmemberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(ClubMembership)
 class ClubMembershipAdmin(admin.ModelAdmin):
-    list_display = ('archer', 'club', 'start_date', 'end_date')
+    actions=[activate_clubmemberships, deactivate_clubmemberships]
+    list_display = ('archer', 'club', 'start_date', 'end_date', 'is_active')
+    list_filter = ('is_active',)
     list_display_links = ('archer',)
     list_per_page = 20
     ordering = ('club', 'archer',)
@@ -112,8 +172,20 @@ class ClubMembershipAdmin(admin.ModelAdmin):
                 'end_date',
             ),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('archer__last_name', 'club__name')
+
+@admin.action(description="Activate selected Categories")
+def activate_categories(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Categories")
+def deactivate_categories(modeladmin, request, queryset):
+    queryset.update(is_active=False)
 
 class CategoryMembershipInline(admin.TabularInline):
     model = CategoryMembership
@@ -124,10 +196,12 @@ class CategoryMembershipInline(admin.TabularInline):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    actions=[activate_categories, deactivate_categories]
     inlines = [
         CategoryMembershipInline
     ]
-    list_display = ('name',)
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -142,12 +216,26 @@ class CategoryAdmin(admin.ModelAdmin):
                 'author', 
             ),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name', 'info')
 
+@admin.action(description="Activate selected Category Memberships")
+def activate_category_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Category Memberships")
+def deactivate_category_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(CategoryMembership)
 class CategoryMembershipAdmin(admin.ModelAdmin):
-    list_display = ('category', 'archer', 'agegroup',)
+    actions=[activate_category_memberships, deactivate_category_memberships]
+    list_display = ('category', 'archer', 'agegroup', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('category', 'archer',)
     list_per_page = 20
     ordering = ('category', 'archer')
@@ -164,8 +252,20 @@ class CategoryMembershipAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author'),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('category__name', 'archer__name')
+
+@admin.action(description="Activate selected Disciplines")
+def activate_disciplines(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Disciplines")
+def deactivate_disciplines(modeladmin, request, queryset):
+    queryset.update(is_active=False)
 
 class DisciplineMembershipInline(admin.TabularInline):
     model = DisciplineMembership
@@ -176,10 +276,12 @@ class DisciplineMembershipInline(admin.TabularInline):
     
 @admin.register(Discipline)
 class DisciplineAdmin(admin.ModelAdmin):
+    actions=[activate_disciplines, deactivate_disciplines]
     inlines = [
         DisciplineMembershipInline
     ]
-    list_display = ('name',)
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -194,12 +296,26 @@ class DisciplineAdmin(admin.ModelAdmin):
                 'author', 
             ),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name', 'info')
-    
+
+@admin.action(description="Activate selected Discipline Memberships")
+def activate_discipline_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Discipline Memberships")
+def deactivate_discipline_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(DisciplineMembership)
 class DisciplineMembershipAdmin(admin.ModelAdmin):
-    list_display = ('discipline', 'archer',)
+    actions=[activate_discipline_memberships, deactivate_discipline_memberships]
+    list_display = ('discipline', 'archer', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('discipline', 'archer',)
     list_per_page = 20
     ordering = ('discipline', 'archer',)
@@ -215,9 +331,22 @@ class DisciplineMembershipAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author'),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
-    search_fields = ('discipline__name', 'archer__name')
+    search_fields = ('discipline__name', 'archer__last_name',)
     
+@admin.action(description="Activate selected Teams")
+def activate_teams(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Teams")
+def deactivate_teams(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
 class TeamMembershipInline(admin.TabularInline):
     model = TeamMembership
     extra = 1
@@ -227,10 +356,12 @@ class TeamMembershipInline(admin.TabularInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
+    actions=[activate_teams, deactivate_teams]
     inlines = [
         TeamMembershipInline
     ]
-    list_display = ('name',)
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -242,12 +373,26 @@ class TeamAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author',),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name',)
 
+admin.action(description="Activate selected Team Memberships")
+def activate_team_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Team Memberships")
+def deactivate_team_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(TeamMembership)
 class TeamMembershipAdmin(admin.ModelAdmin):
-    list_display = ('team', 'archer',)
+    actions=[activate_team_memberships, deactivate_team_memberships]
+    list_display = ('team', 'archer', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('team', 'archer',)
     list_per_page = 20
     ordering = ('team', 'archer',)
@@ -259,12 +404,26 @@ class TeamMembershipAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author',),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('team__name', 'archer__name')
-    
+
+@admin.action(description="Activate selected Scoring Sheets")
+def activate_scoring_sheets(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Scoring Sheets")
+def deactivate_scoring_sheets(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+ 
 @admin.register(ScoringSheet)
 class ScoringSheetAdmin(admin.ModelAdmin):
-    list_display = ('name', 'columns', 'rows')
+    actions=[activate_scoring_sheets, deactivate_scoring_sheets]
+    list_display = ('name', 'columns', 'rows', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -276,15 +435,50 @@ class ScoringSheetAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author',),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name', 'info')
     
-# Wagtail Snippets
+@admin.register(TargetFaceNameChoice)
+class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
+    list_display=('name', 'is_active',)
+    list_filter=('is_active',)
+    list_display_links=('name',)
+    list_per_page=20
+    ordering=('name',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name',
+                'environment',
+                'discipline',
+                'targetsize',
+                'keyfeature',
+                'info',
+            )
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+    search_fields = ('name', 'info')
 
-from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
-from wagtail.snippets.models import register_snippet
-from wagtail.admin.ui.tables import BooleanColumn
-from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
+@admin.register(TargetFace)
+class TargetFace(admin.ModelAdmin):
+    pass
+
+# TODO: Here
+
+    
+# Wagtail Snippets
 
 class ArcherSnippetViewSet(SnippetViewSet):
     model = Archer
@@ -294,6 +488,7 @@ class ArcherSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('last_name', 'first_name', 'middle_name', 'union_number', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('last_name'),
@@ -332,6 +527,7 @@ class AgeGroupSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('name'),
@@ -344,6 +540,13 @@ class AgeGroupSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class ClubSnippetViewSet(SnippetViewSet):
@@ -354,6 +557,7 @@ class ClubSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', 'town', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('name'),
@@ -380,6 +584,13 @@ class ClubSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class ClubMembershipSnippetViewSet(SnippetViewSet):
@@ -391,6 +602,7 @@ class ClubMembershipSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('archer', 'club', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('club'),
@@ -412,6 +624,13 @@ class ClubMembershipSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class CategorySnippetViewSet(SnippetViewSet):
@@ -422,6 +641,7 @@ class CategorySnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('name'),
@@ -435,6 +655,13 @@ class CategorySnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class CategoryMembershipSnippetViewSet(SnippetViewSet):
@@ -445,6 +672,8 @@ class CategoryMembershipSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('category', 'archer', 'agegroup', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
+
 
     panels = [
         FieldPanel('category'),
@@ -459,6 +688,13 @@ class CategoryMembershipSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class TeamSnippetViewSet(SnippetViewSet):
@@ -469,6 +705,28 @@ class TeamSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('info'),
+        FieldPanel('archers'),
+        MultiFieldPanel(
+            [
+                FieldPanel('slug'),
+                FieldPanel('author'),
+            ],
+            heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
+    ]
 
 class TeamMembershipSnippetViewSet(SnippetViewSet):
     model = TeamMembership
@@ -478,6 +736,7 @@ class TeamMembershipSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('team', 'archer', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('team'),
@@ -491,6 +750,13 @@ class TeamMembershipSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]   
 
 class ScoringSheetSnippetViewSet(SnippetViewSet):
@@ -501,6 +767,7 @@ class ScoringSheetSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', 'columns', 'rows', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [  
         FieldPanel('name'),
@@ -517,6 +784,13 @@ class ScoringSheetSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
     
 class DisciplineSnippetViewSet(SnippetViewSet):
@@ -527,6 +801,7 @@ class DisciplineSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('name'),
@@ -540,6 +815,13 @@ class DisciplineSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class DisciplineMembershipSnippetViewSet(SnippetViewSet):
@@ -550,6 +832,7 @@ class DisciplineMembershipSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('discipline', 'archer', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('discipline'),
@@ -561,6 +844,13 @@ class DisciplineMembershipSnippetViewSet(SnippetViewSet):
                 FieldPanel('info'),
             ],
             heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
             classname="collapsible collapsed",
         ),
     ]

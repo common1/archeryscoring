@@ -61,7 +61,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("archer information"),
+        verbose_name=_("info of archer"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -120,7 +120,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("state or province of archer"),
+        verbose_name=_("province or state of archer"),
         help_text=_("format: not required, max-64")
     )
 
@@ -176,23 +176,26 @@ class Discipline(BaseModel):
         null=False,
         unique=True,
         blank=False,
-        verbose_name=_("discipline name"),
+        verbose_name=_("name of discipline"),
         help_text=_("format: required, max-64")
     )
-    slug = AutoSlugField(populate_from='name',editable=True)
+    slug = AutoSlugField(
+        populate_from='name',
+        editable=True
+    )
     archers = models.ManyToManyField(
         Archer,
         through='DisciplineMembership',
         blank=True,
         help_text=_("format: not required"),
         related_name='disciplines',
-        verbose_name=_("archers in discipline"),
+        verbose_name=_("archers of discipline"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("discipline information"),
+        verbose_name=_("information of discipline"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -224,7 +227,7 @@ class DisciplineMembership(BaseModel):
         Discipline,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("disciplinemembership discipline"),
+        verbose_name=_("discipline of disciplinemembership"),
         help_text=_("format: required"),
         related_name='disciplinememberships'
     )
@@ -232,16 +235,16 @@ class DisciplineMembership(BaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("disciplinemembership archer"),
+        verbose_name=_("archer of disciplinemembership"),
         help_text=_("format: required"),
-        related_name='disciplinemembership_archer'
+        related_name='archer_disciplinemembership'
     )
     slug = AutoSlugField(populate_from=('archer__last_name', 'discipline__name'), editable=True)
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("membership information"),
+        verbose_name=_("info of disciplinemembership"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -776,19 +779,176 @@ class ScoringSheet(BaseModel):
     def __unicode__(self):
         return f"{self.name} ( rows : {self.rows}, columns : {self.columns} )"
 
+# ENVIRONMENT
+# -------------------
+# Indoor
+# Outdoor
+
+# DISCIPLINE
+# ------------------
+# Target Archery
+# Field Archery
+# 3D Archery
+
+# TARGETSIZE
 # 122 cm
 # 80 cm
 # 60 cm
 # 40 cm
 # 20 cm
-class TargetDiameter(BaseModel):
+
+# KEYFEATURE
+# 5-Zone
+# 10-Zone
+# 3-Spot
+
+class TargetFaceNameChoice(BaseModel):
+    ENVIRONMENTS = [
+        ('Indoor', 'Indoor'),
+        ('Outdoor', 'Outdoor'),
+    ]
+    
+    DISCIPLINES = [
+        ('Target Archery', 'Target Archery'),
+        ('Field Archery', 'Field Archery'),
+        ('3D Archery', '3D Archery'),
+    ]
+    
+    TARGETSIZES = [
+        ('122', '122'),
+        ('80', '80'),
+        ('60', '60'),
+        ('40', '40'),
+        ('30', '30'),
+        ('20', '20'),
+    ]
+    
+    KEYFEATURES = [
+        ('5-Zone', '5-Zone'),
+        ('10-Zone', '10-Zone'),
+        ('3D', '3D'),
+    ]
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    name = models.CharField(
+        max_length=128,
+        null=False,
+        unique=True,
+        blank=False,
+        verbose_name=_("Name"),
+        help_text=_("format: required, max-128")
+    )
+    slug = AutoSlugField(populate_from='name',editable=True)
+    environment = models.CharField(
+        max_length=32,
+        null=False,
+        unique=True,
+        blank=False,
+        choices=ENVIRONMENTS,
+        verbose_name=_("Environment"),
+        help_text=_("format: required, max-32")
+    )
+    discipline = models.CharField(
+        max_length=32,
+        null=False,
+        unique=True,
+        blank=False,
+        choices=DISCIPLINES,
+        verbose_name=_("Discipline"),
+        help_text=_("format: required, max-32")
+    )
+    targetsize = models.CharField(
+        max_length=32,
+        null=False,
+        unique=True,
+        blank=False,
+        choices=TARGETSIZES,
+        verbose_name=_("Target size"),
+        help_text=_("format: required, max-32")
+    )
+    keyfeature = models.CharField(
+        max_length=32,
+        null=False,
+        unique=True,
+        blank=False,
+        choices=KEYFEATURES,
+        verbose_name=_("Key feature"),
+        help_text=_("format: required, max-32")
+    )
+    
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("info of TargetFaceNameChoice"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='targetface_namechoice_author',
+        verbose_name=_("author of TargetFaceNameChoice"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+    
+    class Meta:
+        db_table = 'targetfacenamechoices'
+        ordering = ['name']
+        verbose_name = _("Target Face Name Choice")
+        verbose_name_plural = _("Target Faces Name Choices")
+
+    def __str__(self):
+        return f"{self.name} )"
+
+    def __unicode__(self):
+        return f"{self.name} )"
+
+def get_choices():
+    result=[]
+    
+    # Fill list
+
+    return result
+    
 class TargetFace(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
+    name = models.CharField(
+        default="name of targetface",
+        max_length=64,
+        null=False,
+        unique=False,
+        blank=False,
+        choices=get_choices(),
+        verbose_name=_("targetface name"),
+        help_text=_("format: required, max-64")
+    )
+    slug = AutoSlugField(populate_from='name',editable=True)
+
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("targetface information"),
+        help_text=_("format: not required"),
+    )
+
+    class Meta:
+        db_table = 'targetfaces'
+        ordering = ['name']
+        verbose_name = _("Target Face")
+        verbose_name_plural = _("Target Faces")
+
+    def __str__(self):
+        return f"{self.name} )"
+
+    def __unicode__(self):
+        return f"{self.name} )"
+
 class Contest(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

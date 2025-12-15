@@ -5,6 +5,19 @@ from .models import (
     BowTypeMembership,
 )
 
+from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
+from wagtail.snippets.models import register_snippet
+from wagtail.admin.ui.tables import BooleanColumn
+from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
+
+@admin.action(description="Activate selected Bow Types")
+def activate_bowtypes(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Bow Types")
+def deactivate_bowtypes(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 class BowTypeMembershipInline(admin.TabularInline):
     model = BowTypeMembership
     extra = 1
@@ -14,10 +27,12 @@ class BowTypeMembershipInline(admin.TabularInline):
     
 @admin.register(BowType)
 class BowTypeAdmin(admin.ModelAdmin):
+    actions=[activate_bowtypes, deactivate_bowtypes]
     inlines = [
         BowTypeMembershipInline
     ]
-    list_display = ('name',)
+    list_display = ('name', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
@@ -29,12 +44,26 @@ class BowTypeAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author',),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('name',)
 
+@admin.action(description="Activate selected Bow Type Memberships")
+def activate_bowtype_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Bow Type Memberships")
+def deactivate_bowtype_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
 @admin.register(BowTypeMembership)
 class BowTypeMembershipAdmin(admin.ModelAdmin):
-    list_display = ('bowtype', 'archer',)
+    actions=[activate_bowtype_memberships, deactivate_bowtype_memberships]
+    list_display = ('bowtype', 'archer', 'is_active',)
+    list_filter = ('is_active',)
     list_display_links = ('bowtype', 'archer',)
     list_per_page = 20
     ordering = ('bowtype', 'archer',)
@@ -46,17 +75,17 @@ class BowTypeMembershipAdmin(admin.ModelAdmin):
             'classes': ['collapse'],
             'fields': ('slug', 'author',),
         }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
     )
     search_fields = ('bowtype__name', 'archer__name')
     
 # Wagtail Snippets
 
-from wagtail.snippets.views.snippets import SnippetViewSet, SnippetViewSetGroup
-from wagtail.snippets.models import register_snippet
-from wagtail.admin.ui.tables import BooleanColumn   
-from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
-
 class BowTypeSnippetViewSet(SnippetViewSet):
+    actions=[activate_bowtypes, deactivate_bowtypes]
     model = BowType
     menu_label = "Bow Types"
     menu_icon = "folder-open-inverse"
@@ -64,6 +93,7 @@ class BowTypeSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('name'),
@@ -77,6 +107,13 @@ class BowTypeSnippetViewSet(SnippetViewSet):
             heading = "Extra Information",
             classname="collapsible collapsed",
         ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
+            classname="collapsible collapsed",
+        ),
     ]
 
 class BowTypeMembershipSnippetViewSet(SnippetViewSet):
@@ -87,6 +124,7 @@ class BowTypeMembershipSnippetViewSet(SnippetViewSet):
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('bowtype', 'archer', BooleanColumn('is_active'),)
+    list_filter = ('is_active',)
 
     panels = [
         FieldPanel('bowtype'),
@@ -98,6 +136,13 @@ class BowTypeMembershipSnippetViewSet(SnippetViewSet):
                 FieldPanel('author'),
             ],
             heading = "Extra Information",
+            classname="collapsible collapsed",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('is_active'),
+            ],
+            heading = "Special",
             classname="collapsible collapsed",
         ),
     ]

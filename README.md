@@ -226,6 +226,8 @@ In archery_materials.models.py
 Move id definition to ArcheryMaterialsBaseModel
 In modeling.models.py
 Move id definition to BaseModel
+Part 3
+modeling.models.py, modeling.admin.py
 
 ```bash
 ```
