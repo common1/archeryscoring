@@ -245,5 +245,12 @@ Finish
 ```bash
 ```
 
+## Chapter 019 - verbose_name adjustment
 
+```
+Adjust ment of verbose_name models
+```
+
+```bash
+```
 

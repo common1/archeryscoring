@@ -30,7 +30,7 @@ class BowType(ArcheryMaterialsBaseModel):
         null=False,
         unique=True,
         blank=False,
-        verbose_name=_("bow type name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-32")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
@@ -40,13 +40,13 @@ class BowType(ArcheryMaterialsBaseModel):
         blank=True,
         help_text=_("format: not required"),
         related_name='bowtypes',
-        verbose_name=_("archers in bowtype"),
+        verbose_name=_("Archers"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("bowtype information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -54,7 +54,7 @@ class BowType(ArcheryMaterialsBaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='bowtype_author',
-        verbose_name=_("author of bowtype"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -78,7 +78,7 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         BowType,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("bowtypemembership bowtype"),
+        verbose_name=_("Bow type"),
         help_text=_("format: required"),
         related_name='BowTypeMembership'
     )
@@ -86,7 +86,7 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("bowtypemembership archer"),        
+        verbose_name=_("Archer"),        
         related_name='bowtypemembership_archer',
         help_text=_("format: required"),
     )
@@ -98,7 +98,7 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("bowtype information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -106,7 +106,7 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='bowtype_membership_author',
-        verbose_name=_("author of bowtypemembership"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 

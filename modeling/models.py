@@ -30,7 +30,7 @@ class Archer(BaseModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("last name of archer"),
+        verbose_name=_("Last name"),
         help_text=_("format: required, max-64")
     )
     first_name = models.CharField(
@@ -38,7 +38,7 @@ class Archer(BaseModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("first name of archer"),
+        verbose_name=_("First name"),
         help_text=_("format: required, max-32")
     )
     middle_name = models.CharField(
@@ -46,7 +46,7 @@ class Archer(BaseModel):
         null=True,
         unique=False,
         blank=True,
-        verbose_name=_("middle name of archer"),
+        verbose_name=_("Middle name"),
         help_text=_("format: not required, max-6")
     )
     slug = AutoSlugField(populate_from='last_name',editable=True)
@@ -54,21 +54,21 @@ class Archer(BaseModel):
         unique=True,
         null=True,
         blank=False,
-        verbose_name=_("union number of archer"),
+        verbose_name=_("Union number"),
         help_text=_("format: not required")
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("info of archer"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
         default=1,
-        verbose_name=_("author of archer"),
+        verbose_name=_("Author"),
         related_name='archer_author',
         help_text=_("format: not required, default=1 (superuser)"),
     )
@@ -80,7 +80,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("email address of archer"),
+        verbose_name=_("Email"),
         help_text=_("format: not required, max-254")
     )
     phone = models.CharField(
@@ -88,7 +88,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("phone number of archer"),
+        verbose_name=_("Phone number"),
         help_text=_("format: not required, max-15")
     )
     address = models.CharField(
@@ -96,7 +96,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("address of archer"),
+        verbose_name=_("Address"),
         help_text=_("format: not required, max-128")
     )
     city = models.CharField(
@@ -104,7 +104,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("city of archer"),
+        verbose_name=_("City"),
         help_text=_("format: not required, max-64")
     )
     zip_code = models.CharField(
@@ -112,7 +112,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("zip code of archer"),
+        verbose_name=_("Zip code"),
         help_text=_("format: not required, max-6")
     )
     province = models.CharField(
@@ -120,7 +120,7 @@ class Archer(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("province or state of archer"),
+        verbose_name=_("Province"),
         help_text=_("format: not required, max-64")
     )
 
@@ -133,7 +133,7 @@ class Archer(BaseModel):
         blank=True,
         editable=True,
         unique=False,
-        verbose_name=_("birth date of archer"),
+        verbose_name=_("Birth date"),
         help_text=_("format: Y-m-d, not required"),
     )
     
@@ -176,7 +176,7 @@ class Discipline(BaseModel):
         null=False,
         unique=True,
         blank=False,
-        verbose_name=_("name of discipline"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(
@@ -189,13 +189,13 @@ class Discipline(BaseModel):
         blank=True,
         help_text=_("format: not required"),
         related_name='disciplines',
-        verbose_name=_("archers of discipline"),
+        verbose_name=_("Archers"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("information of discipline"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -203,7 +203,7 @@ class Discipline(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='discipline_author',
-        verbose_name=_("author of discipline"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -227,7 +227,7 @@ class DisciplineMembership(BaseModel):
         Discipline,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("discipline of disciplinemembership"),
+        verbose_name=_("Discipline"),
         help_text=_("format: required"),
         related_name='disciplinememberships'
     )
@@ -235,7 +235,7 @@ class DisciplineMembership(BaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("archer of disciplinemembership"),
+        verbose_name=_("Archer"),
         help_text=_("format: required"),
         related_name='archer_disciplinemembership'
     )
@@ -244,7 +244,7 @@ class DisciplineMembership(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("info of disciplinemembership"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -252,7 +252,7 @@ class DisciplineMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='discipline_membership_author',
-        verbose_name=_("author of membership"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -278,7 +278,7 @@ class Club(BaseModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("club name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
@@ -287,7 +287,7 @@ class Club(BaseModel):
         null=True,
         unique=False,
         blank=True,
-        verbose_name=_("address of club"),
+        verbose_name=_("Address"),
         help_text=_("format: not required, max-128")
     )
     zip_code = models.CharField(
@@ -295,7 +295,7 @@ class Club(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("zip code of archer"),
+        verbose_name=_("Zip code"),
         help_text=_("format: not required, max-6")
     )
     town = models.CharField(
@@ -303,7 +303,7 @@ class Club(BaseModel):
         null=True,
         unique=False,
         blank=True,
-        verbose_name=_("town name"),
+        verbose_name=_("Town"),
         help_text=_("format: not required, max-64")
     )
     archers = models.ManyToManyField(
@@ -312,13 +312,13 @@ class Club(BaseModel):
         blank=True,
         help_text=_("format: not required"),
         related_name='clubs',
-        verbose_name=_("archers in club"),
+        verbose_name=_("Archers"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("club information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -326,7 +326,7 @@ class Club(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='author_club',
-        verbose_name=_("author of club"),
+        verbose_name=_("Author"),
         help_text=_("format: not required, default=1 (superuser)"),
     )
 
@@ -337,7 +337,7 @@ class Club(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("email address of club"),
+        verbose_name=_("Email"),
         help_text=_("format: not required, max-254")
     )
     phone = models.CharField(
@@ -345,7 +345,7 @@ class Club(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("phone number of club"),
+        verbose_name=_("Phone number"),
         help_text=_("format: not required, max-15")
     )
     website = models.URLField(
@@ -353,7 +353,7 @@ class Club(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("website of club"),
+        verbose_name=_("Website"),
         help_text=_("format: not required, max-200")
     )
     social_media = models.CharField(
@@ -361,7 +361,7 @@ class Club(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("social media handle of club"),
+        verbose_name=_("Social media"),
         help_text=_("format: not required, max-128")
     )
      
@@ -387,7 +387,7 @@ class ClubMembership(BaseModel):
         Club,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("club of the member"),
+        verbose_name=_("Club"),
         help_text=_("format: required"),
         related_name='memberships'
     )
@@ -395,7 +395,7 @@ class ClubMembership(BaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("archer who is member"),
+        verbose_name=_("Archer"),
         help_text=_("format: required"),
         related_name='clubmember_archer'
     )
@@ -405,7 +405,7 @@ class ClubMembership(BaseModel):
         blank=True,
         editable=True,
         unique=False,
-        verbose_name=_("start date of membership"),
+        verbose_name=_("Start date"),
         help_text=_("format: Y-m-d, not required"),
     )
     end_date = models.DateField(
@@ -413,7 +413,7 @@ class ClubMembership(BaseModel):
         blank=True,
         editable=True,
         unique=False,
-        verbose_name=_("end date of membership"),
+        verbose_name=_("End date"),
         help_text=_("format: Y-m-d, not required"),
     )
     
@@ -423,7 +423,7 @@ class ClubMembership(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("membership information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -431,7 +431,7 @@ class ClubMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='membership_author',
-        verbose_name=_("author of membership"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -464,7 +464,7 @@ class Category(BaseModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("category name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
@@ -474,20 +474,20 @@ class Category(BaseModel):
         blank=True,
         help_text=_("format: not required"),
         related_name='categories',
-        verbose_name=_("archers in category"),
+        verbose_name=_("Archers"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("category information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
         default=1,
-        verbose_name=_("author of category"),
+        verbose_name=_("Author"),
         related_name='category_author',
         help_text=_("format: required, default=1 (superuser)"),
     )
@@ -512,7 +512,7 @@ class AgeGroup(BaseModel):
         null=False,
         unique=True,
         blank=False,
-        verbose_name=_("age group name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-32")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
@@ -520,7 +520,7 @@ class AgeGroup(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("agegroup information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -528,7 +528,7 @@ class AgeGroup(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='agegroup_author',
-        verbose_name=_("author of agegroup"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -552,7 +552,7 @@ class CategoryMembership(BaseModel):
         Category,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("categorymembership category"),
+        verbose_name=_("Category"),
         help_text=_("format: required"),
         related_name='categorymemberships'
     )
@@ -560,7 +560,7 @@ class CategoryMembership(BaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("categorymembership archer"),        
+        verbose_name=_("Archer"),        
         related_name='categorymembership_archer',
         help_text=_("format: required"),
     )
@@ -570,7 +570,7 @@ class CategoryMembership(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("age group of category membership"),
+        verbose_name=_("Age Group"),
         related_name='categorymembership_agegroup',
         help_text=_("format: required"),
     )
@@ -582,7 +582,7 @@ class CategoryMembership(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("category information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -590,7 +590,7 @@ class CategoryMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='category_membership_author',
-        verbose_name=_("author of categorymembership"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -618,7 +618,7 @@ class Team(BaseModel):
         null=False,
         blank=False,
         unique=False,
-        verbose_name=_("team name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name', editable=True)
@@ -628,13 +628,13 @@ class Team(BaseModel):
         blank=True,
         help_text=_("format: not required"),
         related_name='teams',
-        verbose_name=_("archers in team"),
+        verbose_name=_("Archers"),
     )
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("team information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -642,7 +642,7 @@ class Team(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='team_author',
-        verbose_name=_("author of team"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -666,7 +666,7 @@ class TeamMembership(BaseModel):
         Team,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("teammembership team"),
+        verbose_name=_("Team"),
         help_text=_("format: required"),
         related_name='teammemberships'
     )
@@ -674,7 +674,7 @@ class TeamMembership(BaseModel):
         Archer,
         on_delete=models.PROTECT,
         unique=False,
-        verbose_name=_("teammembership archer"),
+        verbose_name=_("Archer"),
         help_text=_("format: required"),
         related_name='teammembership_archer'
     )
@@ -689,7 +689,7 @@ class TeamMembership(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("teammembership information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -697,7 +697,7 @@ class TeamMembership(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='teammembership',
-        verbose_name=_("author of teammembership"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
@@ -728,7 +728,7 @@ class ScoringSheet(BaseModel):
         null=False,
         unique=False,
         blank=False,
-        verbose_name=_("scoringsheet name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
@@ -738,7 +738,7 @@ class ScoringSheet(BaseModel):
         blank=False,
         default=3,
         validators=[MinValueValidator(3), MaxValueValidator(20)],
-        verbose_name=_("number of columns"),
+        verbose_name=_("Columns"),
         help_text=_("format: required min-3, max-20")
     )
     rows = models.PositiveIntegerField(
@@ -747,7 +747,7 @@ class ScoringSheet(BaseModel):
         blank=False,
         default=10,
         validators=[MinValueValidator(3), MaxValueValidator(20)],
-        verbose_name=_("number of rows"),
+        verbose_name=_("Rows"),
         help_text=_("format: required min-3, max-20")
     )
         
@@ -755,7 +755,7 @@ class ScoringSheet(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("scoringsheet information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -763,7 +763,7 @@ class ScoringSheet(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='scoringsheet_author',
-        verbose_name=_("author of scoring sheet"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
     
@@ -861,7 +861,7 @@ class TargetFaceNameChoice(BaseModel):
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("info of TargetFaceNameChoice"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -869,7 +869,7 @@ class TargetFaceNameChoice(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='targetface_namechoice_author',
-        verbose_name=_("author of TargetFaceNameChoice"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
     
@@ -890,15 +890,7 @@ class TargetFaceNameChoice(BaseModel):
 
     def __unicode__(self):
         return f"{self.name} )"
-
-def get_choices():
-    result=[]
-    # choices = TargetFaceNameChoice.objects.all()
-    # for choice in choices:
-    #     result.append((choice.name, choice.name),)
-
-    return result
-    
+  
 class TargetFace(BaseModel):
 
     def __init__(self, *args, **kwargs):        
@@ -917,16 +909,16 @@ class TargetFace(BaseModel):
         unique=False,
         blank=False,
         choices=get_choices,
-        verbose_name=_("targetface name"),
+        verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
     slug = AutoSlugField(populate_from='name',editable=True)
-
+    # TODO: Insert image field
     info = models.TextField(
         null=True,
         blank=True,
         unique=False,
-        verbose_name=_("targetface information"),
+        verbose_name=_("Info"),
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
@@ -934,7 +926,7 @@ class TargetFace(BaseModel):
         on_delete=models.PROTECT,
         default=1,
         related_name='targetface_author',
-        verbose_name=_("author of TargetFace"),
+        verbose_name=_("Author"),
         help_text=_("format: required, default=1 (superuser)"),
     )
 
