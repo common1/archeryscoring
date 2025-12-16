@@ -255,5 +255,19 @@ Minor changes, does not work yet
 ```
 
 ```bash
+del db.sqlite3
+pyclean .
+python manage.py makemigrations
+python manage.py migrate
+python manage.py fill_db
 ```
+
+## Chapter 020 - Adjustmement to modeling
+
+```
+```
+
+```bash
+```
+
 

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import (
     Archer,
     AgeGroup,
@@ -472,8 +473,23 @@ class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'info')
 
+class TargetFaceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):        
+        super().__init__(*args, **kwargs)
+
+        objs = TargetFaceNameChoice.objects.all()
+        if objs:
+            for obj in objs:
+                self.CHOICES.append((obj.name, obj.name),)    
+
+    CHOICES = []
+    CHOICES.append((None, None),)
+
+    name = forms.ChoiceField(choices=CHOICES)
+
 @admin.register(TargetFace)
 class TargetFace(admin.ModelAdmin):
+    form=TargetFaceForm
     list_display = ('name', 'is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)

@@ -889,26 +889,18 @@ class TargetFaceNameChoice(BaseModel):
         return f"{self.name} )"
 
     def __unicode__(self):
-        return f"{self.name} )"
-  
+        return f"{self.name} )"  
+
 class TargetFace(BaseModel):
 
-    def __init__(self, *args, **kwargs):        
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-    def get_choices():
-        names = []
-        choices = TargetFaceNameChoice.objects.all()
-        for choice in choices:
-            names.append((choice.name, choice.name),)
-        return names
-
+            
     name = models.CharField(
         max_length=64,
         null=False,
-        unique=False,
+        unique=True,
         blank=False,
-        choices=get_choices,
         verbose_name=_("Name"),
         help_text=_("format: required, max-64")
     )
