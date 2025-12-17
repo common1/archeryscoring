@@ -814,7 +814,7 @@ class TargetFaceNameChoice(BaseModel):
     name = models.CharField(
         max_length=128,
         null=False,
-        unique=False,
+        unique=True,
         blank=False,
         verbose_name=_("Name"),
         help_text=_("format: generated, max-128")
@@ -882,7 +882,8 @@ class TargetFaceNameChoice(BaseModel):
     def save(self, *args, **kwargs):
         if self.environment and self.discipline and self.targetsize and self.keyfeature:
             self.name = f"{self.environment} {self.discipline} {self.targetsize} {self.keyfeature}"
-
+            
+        print('Inside save')
         super(TargetFaceNameChoice, self).save(*args, **kwargs)
         
     def __str__(self):

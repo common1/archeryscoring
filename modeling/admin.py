@@ -474,19 +474,22 @@ class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
     search_fields = ('name', 'info')
 
 class TargetFaceForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):        
         super().__init__(*args, **kwargs)
 
+    def set_choices():
+        CHOICES = []
+        CHOICES.append((None, None),)
+        
         objs = TargetFaceNameChoice.objects.all()
         if objs:
             for obj in objs:
-                self.CHOICES.append((obj.name, obj.name),)    
+                CHOICES.append((obj.name, obj.name),)    
+        return CHOICES
 
-    CHOICES = []
-    CHOICES.append((None, None),)
-
-    name = forms.ChoiceField(choices=CHOICES)
-
+    name = forms.ChoiceField(choices=set_choices)
+        
 @admin.register(TargetFace)
 class TargetFace(admin.ModelAdmin):
     form=TargetFaceForm
