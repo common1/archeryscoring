@@ -464,9 +464,10 @@ class Command(BaseCommand):
         for targetfacenamechoice in targetfacenamechoices:
             new_name = f"{targetfacenamechoice.environment} {targetfacenamechoice.discipline} {targetfacenamechoice.targetsize} {targetfacenamechoice.keyfeature}"
             if not TargetFaceNameChoice.objects.filter(name=new_name):
+                targetfacenamechoice.name = new_name
                 targetfacenamechoice.save()
                 if SCREEN_OUTPUT:
-                    self.stdout.write(self.style.SUCCESS(f'TargetFaceNameChoice "{targetfacenamechoice.name} created" '))
+                    self.stdout.write(self.style.SUCCESS(f'TargetFaceNameChoice "{new_name} created" '))
     
     # TODO: Finish create_target_faces
     def create_target_faces(self):

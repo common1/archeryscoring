@@ -273,4 +273,17 @@ class TargetFaceNameChoiceAdminForm created
 ```bash
 ```
 
+## Chapter 021 - Adjustmement to modeling
+
+```
+Part 1
+modeling.models.py
+class Round
+class RoundMembership
+class Score
+
+```
+
+```bash
+```
 

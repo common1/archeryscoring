@@ -3,10 +3,12 @@ from django import forms
 from .models import (
     Archer,
     AgeGroup,
-    Club,
-    ClubMembership,
     Category,
     CategoryMembership,
+    Club,
+    ClubMembership,
+    Round,
+    RoundMembership,
     Discipline,
     DisciplineMembership,
     TargetFaceNameChoice,
@@ -471,15 +473,6 @@ class TargetFaceNameChoiceAdminForm(forms.ModelForm):
                 self.instance.name = new_name
     
         return data
-
-    # TODO: Remove this
-    # def save(self, *args, **kwargs):
-    #     if self.environment and self.discipline and self.targetsize and self.keyfeature:
-    #         new_name = f"{self.environment} {self.discipline} {self.targetsize} {self.keyfeature}"
-    #         if TargetFaceNameChoice.objects
-    #     print('Inside save')
-    #     super(TargetFaceNameChoice, self).save(*args, **kwargs)
-
     
 @admin.register(TargetFaceNameChoice)
 class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
@@ -559,9 +552,82 @@ class TargetFaceAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'info')
 
-# TODO: Here
+@admin.action(description="Activate selected Rounds")
+def activate_rounds(modeladmin, request, queryset):
+    queryset.update(is_active=True)
 
-    
+@admin.action(description="Deactivate selected Rounds")
+def deactivate_rounds(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+class RoundMembershipInline(admin.TabularInline):
+    model = RoundMembership
+    extra=1
+    fields = ('round', 'archer',)
+    can_delete = False
+    show_change_link = True
+
+@admin.register(Round)
+class RoundAdmin(admin.ModelAdmin):
+    actions = [activate_rounds, deactivate_rounds]
+    inlines = [
+        RoundMembershipInline
+    ]
+    list_display = (
+        'name', 'start_date', 'start_time', 'end_date', 'end_time', 'is_active',
+    )
+    list_filter = ('is_active',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    search_fields = ('name',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'start_date', 'start_time', 'end_date', 'end_time', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+
+@admin.action(description="Activate selected Round Memberships")
+def activate_round_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Round Memberships")
+def deactivate_round_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+@admin.register(RoundMembership)
+class RoundMembershipAdmin(admin.ModelAdmin):
+    actions=[activate_round_memberships, deactivate_round_memberships]
+    list_display = ('round', 'archer', 'is_active',)
+    list_filter = ('is_active',)
+    list_display_links = ('round', 'archer',)
+    list_per_page = 20
+    ordering = ('round', 'archer',)
+    fieldsets = (
+        (None, {
+            'fields': ('round', 'archer', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+    search_fields = ('round__name', 'archer__name')
+
+# TODO: Continue here
+
 # Wagtail Snippets
 
 class ArcherSnippetViewSet(SnippetViewSet):
