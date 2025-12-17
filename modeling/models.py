@@ -878,14 +878,7 @@ class TargetFaceNameChoice(BaseModel):
         ordering = ['name']
         verbose_name = _("Target Face Name Choice")
         verbose_name_plural = _("Target Faces Name Choices")
-
-    def save(self, *args, **kwargs):
-        if self.environment and self.discipline and self.targetsize and self.keyfeature:
-            self.name = f"{self.environment} {self.discipline} {self.targetsize} {self.keyfeature}"
-            
-        print('Inside save')
-        super(TargetFaceNameChoice, self).save(*args, **kwargs)
-        
+                   
     def __str__(self):
         return f"{self.name} )"
 

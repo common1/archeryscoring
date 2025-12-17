@@ -443,8 +443,47 @@ class ScoringSheetAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'info')
     
+class TargetFaceNameChoiceAdminForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):        
+        super().__init__(*args, **kwargs)
+        
+    class Meta:
+        model = TargetFaceNameChoice
+        exclude = ('id',)
+
+    def clean(self):
+        data = self.cleaned_data
+        
+        # if not ('environment' in data.keys() or 'discipline' in data.keys() or 'targetsize' in data.keys() or 'keyfeature' in data.keys()):
+        #     raise forms.ValidationError("Please fill out missing fields.")
+
+        if ('environment' in data.keys() and 'discipline' in data.keys() and 'targetsize' in data.keys() and 'keyfeature' in data.keys()): 
+            environment = data['environment']
+            discipline = data['discipline']
+            targetsize = data['targetsize']
+            keyfeature = data['keyfeature']
+            new_name = f"{environment} {discipline} {targetsize} {keyfeature}"
+            if TargetFaceNameChoice.objects.filter(name=new_name):
+                raise forms.ValidationError(f"Name '{new_name}' already exists.")
+            else:
+                self.cleaned_data['name'] = new_name
+                self.instance.name = new_name
+    
+        return data
+
+    # TODO: Remove this
+    # def save(self, *args, **kwargs):
+    #     if self.environment and self.discipline and self.targetsize and self.keyfeature:
+    #         new_name = f"{self.environment} {self.discipline} {self.targetsize} {self.keyfeature}"
+    #         if TargetFaceNameChoice.objects
+    #     print('Inside save')
+    #     super(TargetFaceNameChoice, self).save(*args, **kwargs)
+
+    
 @admin.register(TargetFaceNameChoice)
 class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
+    form = TargetFaceNameChoiceAdminForm
     list_display=('name', 'is_active',)
     list_filter=('is_active',)
     list_display_links=('name',)
@@ -473,10 +512,14 @@ class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
     )
     search_fields = ('name', 'info')
 
-class TargetFaceForm(forms.ModelForm):
+class TargetFaceAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):        
         super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = TargetFace
+        exclude = ('id',)
 
     def set_choices():
         CHOICES = []
@@ -489,10 +532,10 @@ class TargetFaceForm(forms.ModelForm):
         return CHOICES
 
     name = forms.ChoiceField(choices=set_choices)
-        
+            
 @admin.register(TargetFace)
-class TargetFace(admin.ModelAdmin):
-    form=TargetFaceForm
+class TargetFaceAdmin(admin.ModelAdmin):
+    form=TargetFaceAdminForm
     list_display = ('name', 'is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)

@@ -265,6 +265,9 @@ python manage.py fill_db
 ## Chapter 020 - Adjustmement to modeling
 
 ```
+Part 3
+modeling.admin.py
+class TargetFaceNameChoiceAdminForm created
 ```
 
 ```bash
