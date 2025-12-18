@@ -287,3 +287,15 @@ class Score
 ```bash
 ```
 
+## Chapter 022 - actions
+
+```
+Part
+modelling.admin.py
+create action
+scores_for_selected_rounds
+```
+
+```bash
+```
+

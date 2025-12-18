@@ -7,14 +7,15 @@ from .models import (
     CategoryMembership,
     Club,
     ClubMembership,
-    Round,
-    RoundMembership,
     Discipline,
     DisciplineMembership,
+    Round,
+    RoundMembership,
     TargetFaceNameChoice,
     TargetFace,
     Team,
     TeamMembership,
+    Score,
     ScoringSheet,
 )
 
@@ -553,25 +554,36 @@ class TargetFaceAdmin(admin.ModelAdmin):
     search_fields = ('name', 'info')
 
 @admin.action(description="Activate selected Rounds")
-def activate_rounds(modeladmin, request, queryset):
+def activate_selected_rounds(modeladmin, request, queryset):
     queryset.update(is_active=True)
 
 @admin.action(description="Deactivate selected Rounds")
-def deactivate_rounds(modeladmin, request, queryset):
+def deactivate_selected_rounds(modeladmin, request, queryset):
     queryset.update(is_active=False)
+
+@admin.action(description="Scores for selected Rounds")
+def scores_for_selected_rounds(modeladmin, request, queryset):
+    # for obj in queryset:
+    #     print(obj.id)
+    round_memberships = RoundMembership.objects.all()
+    print(round_memberships)
 
 class RoundMembershipInline(admin.TabularInline):
     model = RoundMembership
     extra=1
-    fields = ('round', 'archer',)
+    fields = ('archer',)
     can_delete = False
-    show_change_link = True
+    show_change_link = False
 
 @admin.register(Round)
 class RoundAdmin(admin.ModelAdmin):
-    actions = [activate_rounds, deactivate_rounds]
+    actions = [
+        activate_selected_rounds, 
+        deactivate_selected_rounds,
+        scores_for_selected_rounds,
+    ]
     inlines = [
-        RoundMembershipInline
+        RoundMembershipInline,
     ]
     list_display = (
         'name', 'start_date', 'start_time', 'end_date', 'end_time', 'is_active',
@@ -625,6 +637,42 @@ class RoundMembershipAdmin(admin.ModelAdmin):
         }),
     )
     search_fields = ('round__name', 'archer__name')
+
+@admin.register(Score)
+class ScoreAdmin(admin.ModelAdmin):
+    def round_name(self, obj):
+        return obj.round_archer.round.name
+    
+    def archer_name(self, obj):
+        return obj.round_archer.archer
+    
+    list_display = (
+        'archer_name',
+        'score', 
+        'round_name',
+        'is_active',
+    )
+    # list_display_links = ('score',)
+    list_editable = ('score',)
+    list_per_page = 20
+    list_filter = ('is_active', 'round_archer__round__name',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'round_archer',
+                'score',
+                'number_of_arrows',
+            )
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': (
+                'slug', 
+                'author',
+                'info', 
+            ),
+        }),
+    )
 
 # TODO: Continue here
 

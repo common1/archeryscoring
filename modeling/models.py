@@ -1097,7 +1097,7 @@ class Score(BaseModel):
     slug = AutoSlugField(
         populate_from=(
             'round_archer__round__name', 
-            'round_archer__archer__last_name',
+            'round_archer__archer',
         ),
         editable=True
     )
@@ -1123,10 +1123,10 @@ class Score(BaseModel):
         verbose_name_plural = _("Scores")
 
     def __str__(self):
-        return f"{str(self.score)} - {str(self.round_archer__archer__last_name)}"
+        return f"{str(self.score)} - {str(self.round_archer.archer)}"
 
     def __unicode__(self):
-        return f"{str(self.score)} - {str(self.round_archer__archer__last_name)}"
+        return f"{str(self.score)} - {str(self.round_archer.archer)}"
 
 # TODO: Can be removed probably
 class ScoreMembership(BaseModel):
