@@ -7,6 +7,8 @@ from .models import (
     CategoryMembership,
     Club,
     ClubMembership,
+    Competition,
+    CompetitionMembership,
     Discipline,
     DisciplineMembership,
     Round,
@@ -106,7 +108,7 @@ class ClubMembershipInline(admin.TabularInline):
     model = ClubMembership
     extra = 1
     fields = ('archer', 'start_date', 'end_date')
-    can_delete = False
+    can_delete = True
     show_change_link = True
     
 @admin.register(Club)
@@ -195,7 +197,7 @@ class CategoryMembershipInline(admin.TabularInline):
     model = CategoryMembership
     extra = 1
     fields = ('category', 'archer', 'agegroup')
-    can_delete = False
+    can_delete = True
     show_change_link = True
 
 @admin.register(Category)
@@ -275,7 +277,7 @@ class DisciplineMembershipInline(admin.TabularInline):
     model = DisciplineMembership
     extra = 1
     fields = ('discipline', 'archer',)
-    can_delete = False
+    can_delete = True
     show_change_link = True
     
 @admin.register(Discipline)
@@ -355,7 +357,7 @@ class TeamMembershipInline(admin.TabularInline):
     model = TeamMembership
     extra = 1
     fields = ('team', 'archer',)
-    can_delete = False
+    can_delete = True
     show_change_link = True
 
 @admin.register(Team)
@@ -561,6 +563,7 @@ def activate_selected_rounds(modeladmin, request, queryset):
 def deactivate_selected_rounds(modeladmin, request, queryset):
     queryset.update(is_active=False)
 
+# TODO: Scores_for_selected_rounds
 @admin.action(description="Scores for selected Rounds")
 def scores_for_selected_rounds(modeladmin, request, queryset):
     # for obj in queryset:
@@ -572,7 +575,7 @@ class RoundMembershipInline(admin.TabularInline):
     model = RoundMembership
     extra=1
     fields = ('archer',)
-    can_delete = False
+    can_delete = True
     show_change_link = False
 
 @admin.register(Round)
@@ -592,7 +595,7 @@ class RoundAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
-    search_fields = ('name',)
+    search_fields = ('name', 'info',)
     fieldsets = (
         (None, {
             'fields': ('name', 'start_date', 'start_time', 'end_date', 'end_time', 'info',)
@@ -674,7 +677,84 @@ class ScoreAdmin(admin.ModelAdmin):
         }),
     )
 
-# TODO: Continue here
+@admin.action(description="Activate selected Competitions")
+def activate_competitions(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Competitions")
+def deactivate_competitions(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+class CompetitionMembershipInline(admin.TabularInline):
+    model = CompetitionMembership
+    extra = 1
+    fields = ('competition', 'round',)
+    can_delete = True
+    show_change_link = True
+
+@admin.register(Competition)
+class CompetitionAdmin(admin.ModelAdmin):
+    actions=[
+        activate_competitions, 
+        deactivate_competitions
+    ]
+    inlines = [
+        CompetitionMembershipInline
+    ]
+    list_display = (
+        'name', 'start_date', 'end_date', 'is_active',
+    )
+    list_filter = ('is_active',)
+    list_display_links = ('name',)
+    list_per_page = 20
+    ordering = ('name',)
+    search_fields = ('name', 'info',)
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'start_date', 'end_date', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+
+@admin.action(description="Activate selected Competition Memberships")
+def activate_competition_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+
+@admin.action(description="Deactivate selected Competition Memberships")
+def deactivate_competition_memberships(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+@admin.register(CompetitionMembership)
+class CompetitionMembershipAdmin(admin.ModelAdmin):
+    actions=[activate_competition_memberships, deactivate_competition_memberships]
+    list_display = ('competition', 'round', 'is_active',)
+    list_filter = ('is_active',)
+    list_display_links = ('competition', 'round',)
+    list_per_page = 20
+    ordering = ('competition', 'round',)
+    fieldsets = (
+        (None, {
+            'fields': ('competition', 'round', 'info',)
+        }),
+        ('Extra Information', {
+            'classes': ['collapse'],
+            'fields': ('slug', 'author',),
+        }),
+        ('Special', {
+            'classes': ['collapse'],
+            'fields': ('is_active',),
+        }),
+    )
+    search_fields = ('round__name', 'round__name')
+
+# TODO: Continue here in admin
 
 # Wagtail Snippets
 

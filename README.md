@@ -297,5 +297,19 @@ scores_for_selected_rounds
 ```
 
 ```bash
+del db.sqlite3
+pyclean .
+python manage.py makemigrations
+python manage.py migrate
+python manage.py fill_db
+```
+
+## Chapter 023 - Extensions to modeling and fill_db 
+
+```
+```
+
+```bash
+python manage.py startapp utils
 ```
 

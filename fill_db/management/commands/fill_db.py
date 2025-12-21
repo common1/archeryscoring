@@ -20,6 +20,11 @@ from modeling.models import (
     Team,
     TeamMembership,
     ScoringSheet,
+    Round,
+    RoundMembership,
+    Score,
+    Competition,
+    CompetitionMembership,
 )
 
 from archery_materials.models import (
@@ -56,9 +61,10 @@ class Command(BaseCommand):
         self.create_sample_teams()
         self.create_sample_team_memberships()
         self.create_sample_scoringsheets()
-        self.create_target_face_name_choices()
-        self.create_target_faces()
-        # modeling app - begin
+        self.create_sample_target_face_name_choices()
+        self.create_sample_target_faces()
+        self.create_sample_rounds()
+        # modeling app - end
         
         # archery_materials app - begin
         self.create_sample_bowtypes()
@@ -386,15 +392,15 @@ class Command(BaseCommand):
                 rows=12,
                 info=lorem.sentence()
             ),
-        ]        
+        ]
         for scoringsheet in scoringsheets:
             if not ScoringSheet.objects.filter(name=scoringsheet.name):
                 scoringsheet.save()
                 if SCREEN_OUTPUT:
                     self.stdout.write(self.style.SUCCESS(f'Scoringsheet - {scoringsheet.name} created'))
 
-    # TODO: Finish create_target_face_name_choices
-    def create_target_face_name_choices(self):
+    # TODO: Finish create_sample_target_face_name_choices
+    def create_sample_target_face_name_choices(self):
         targetfacenamechoices = [
             TargetFaceNameChoice(
                 author=self.user,
@@ -469,9 +475,57 @@ class Command(BaseCommand):
                 if SCREEN_OUTPUT:
                     self.stdout.write(self.style.SUCCESS(f'TargetFaceNameChoice "{new_name} created" '))
     
-    # TODO: Finish create_target_faces
-    def create_target_faces(self):
+    # TODO: Finish create_sample_target_faces
+    def create_sample_target_faces(self):
         pass
+
+    # January:  1,8,15,22,29
+    # February: 5,12,19,26
+    def create_sample_rounds(self):
+        rounds = [
+            Round(
+                author = self.user,
+                name = "Indoor 18 meter Donderdag 1 Januarie 2026",
+                start_date = "2026-01-01",
+                start_time = "20:00",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Round(
+                author = self.user,
+                name = "Indoor 18 meter Donderdag 8 Januarie 2026",
+                start_date = "2026-01-08",
+                start_time = "20:00",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Round(
+                author = self.user,
+                name = "Indoor 18 meter Donderdag 15 Januarie 2026",
+                start_date = "2026-01-15",
+                start_time = "20:00",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Round(
+                author = self.user,
+                name = "Indoor 18 meter Donderdag 22 Januarie 2026",
+                start_date = "2026-01-22",
+                start_time = "20:00",
+                info=lorem_ipsum.paragraph(),
+            ),
+            Round(
+                author = self.user,
+                name = "Indoor 18 meter Donderdag 29 Januarie 2026",
+                start_date = "2026-01-29",
+                start_time = "20:00",
+                info=lorem_ipsum.paragraph(),
+            ),
+        ]
+        for round in rounds:
+            if not Round.objects.filter(name=round.name):
+                round.save()
+                if SCREEN_OUTPUT:
+                    self.stdout.write(self.style.SUCCESS(f'Round - {round.name} created'))
+            
+        
 
     # modeling app - end
 

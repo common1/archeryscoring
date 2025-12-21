@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from users.models import User
 from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
 from django.core.validators import MaxValueValidator, MinValueValidator
+
 from modeling.models import Archer
 
 class ArcheryMaterialsBaseModel(models.Model):

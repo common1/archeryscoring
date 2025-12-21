@@ -668,7 +668,7 @@ class TeamMembership(BaseModel):
         unique=False,
         verbose_name=_("Team"),
         help_text=_("format: required"),
-        related_name='teammemberships'
+        related_name='teammembership_team'
     )
     archer = models.ForeignKey(
         Archer,
@@ -1129,17 +1129,130 @@ class Score(BaseModel):
         return f"{str(self.score)} - {str(self.round_archer.archer)}"
 
 # TODO: Can be removed probably
-class ScoreMembership(BaseModel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+# class ScoreMembership(BaseModel):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
 
 class Competition(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    name = models.CharField(
+        max_length=64,
+        null=False,
+        unique=True,
+        blank=False,
+        default='',
+        verbose_name=_("Name"),
+        help_text=_("format: required, max-64")
+    )
+    slug = AutoSlugField(
+        populate_from='name',
+        editable=True
+    )
+    rounds = models.ManyToManyField(
+        Round,
+        through='CompetitionMembership',
+        blank=True,
+        help_text=_("format: not required"),
+        related_name='competitions',
+        verbose_name=_("Competitions"),
+    )
+    start_date = models.DateField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("Start date"),
+        help_text=_("format: Y-m-d, not required"),
+    )
+    end_date = models.DateField(
+        null=True,
+        blank=True,
+        editable=True,
+        unique=False,
+        verbose_name=_("End date"),
+        help_text=_("format: Y-m-d, not required"),
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("Info"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='author_competition',
+        verbose_name=_("Author"),
+        help_text=_("format: not required, default=1 (superuser)"),
+    )
+
+    class Meta:
+        db_table = 'competitions'
+        ordering = ['name']
+        verbose_name = _("Competitions")
+        verbose_name_plural = _("Competitions")
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):       
+        return self.name
+
 class CompetitionMembership(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    competition = models.ForeignKey(
+        Competition,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("Competition"),
+        help_text=_("format: required"),
+        related_name='competitionmembership_competition'
+    )
+    round = models.ForeignKey(
+        Round,
+        on_delete=models.PROTECT,
+        unique=False,
+        verbose_name=_("Round"),
+        help_text=_("format: required"),
+        related_name='competitionmembership_round'
+    )
+    slug = AutoSlugField(
+        populate_from=('competition__name', 'round__name',), 
+        editable=True,
+    )
+    info = models.TextField(
+        null=True,
+        blank=True,
+        unique=False,
+        verbose_name=_("Info"),
+        help_text=_("format: not required"),
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='competition_membership_author',
+        verbose_name=_("Author"),
+        help_text=_("format: required, default=1 (superuser)"),
+    )
+
+    class Meta:
+        db_table = 'competitionmemberships'
+        ordering = ['competition__name']
+        verbose_name = _("Competition Membership")
+        verbose_name_plural = _("Competition Memberships")
+
+    def __str__(self):
+        return f"{str(self.competition)} - {str(self.round)}"
+
+    def __unicode__(self):
+        return f"{str(self.competition)} - {str(self.round)}"
 
 # Wagtail Pages
 
