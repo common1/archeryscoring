@@ -313,3 +313,11 @@ python manage.py fill_db
 python manage.py startapp utils
 ```
 
+## Chapter 024 - Changes to modeling.admin
+
+```
+```
+
+```bash
+```
+

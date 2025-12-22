@@ -760,13 +760,17 @@ class CompetitionMembershipAdmin(admin.ModelAdmin):
 
 class ArcherSnippetViewSet(SnippetViewSet):
     model = Archer
+    icon = "arrow-right-full"
     menu_label = "Archers"
-    menu_icon = "user"
     menu_order = 10
     add_to_settings_menu = False
     add_to_admin_menu = False
     list_display = ('last_name', 'first_name', 'middle_name', 'union_number', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
+    history_view_enabled = True
+    deletete_view_enabled=False
 
     panels = [
         FieldPanel('last_name'),
@@ -806,6 +810,8 @@ class AgeGroupSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('name'),
@@ -836,6 +842,8 @@ class ClubSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', 'town', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('name'),
@@ -881,6 +889,8 @@ class ClubMembershipSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('archer', 'club', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('club'),
@@ -920,6 +930,8 @@ class CategorySnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('name'),
@@ -951,7 +963,8 @@ class CategoryMembershipSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('category', 'archer', 'agegroup', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
-
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('category'),
@@ -984,6 +997,8 @@ class TeamSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('name'),
@@ -1015,6 +1030,8 @@ class TeamMembershipSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('team', 'archer', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('team'),
@@ -1046,6 +1063,8 @@ class ScoringSheetSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', 'columns', 'rows', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [  
         FieldPanel('name'),
@@ -1080,6 +1099,8 @@ class DisciplineSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('name', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('name'),
@@ -1106,9 +1127,15 @@ class DisciplineSnippetViewSet(SnippetViewSet):
 class TargetFaceNameChoiceSnippetViewSet(SnippetViewSet):
     model = TargetFaceNameChoice
 
+    inspect_view_enabled = True
+    copy_view_enabled = True
+
 # TODO: Finish TargetFaceSnippetViewSet
 class TargetFaceSnippetViewSet(SnippetViewSet):
     model = TargetFace
+
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
 class DisciplineMembershipSnippetViewSet(SnippetViewSet):
     model = DisciplineMembership
@@ -1119,6 +1146,8 @@ class DisciplineMembershipSnippetViewSet(SnippetViewSet):
     add_to_admin_menu = False
     list_display = ('discipline', 'archer', BooleanColumn('is_active'),)
     list_filter = ('is_active',)
+    inspect_view_enabled = True
+    copy_view_enabled = True
 
     panels = [
         FieldPanel('discipline'),
@@ -1140,6 +1169,8 @@ class DisciplineMembershipSnippetViewSet(SnippetViewSet):
             classname="collapsible collapsed",
         ),
     ]
+
+# TODO: More SnippetView classes here
 
 class ModelingSnippetViewSetGroup(SnippetViewSetGroup):
     menu_label = "Modeling Snippets"
