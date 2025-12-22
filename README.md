@@ -321,3 +321,19 @@ python manage.py startapp utils
 ```bash
 ```
 
+## Chapter 025 - Adding extra fields to a Django custom user model
+
+[https://pythoneatstail.com/en/overview-all-articles/add-extra-fields-custom-user-model/]
+
+```
+Part 1
+users.admin.py
+class UserAdmin
+users.models.py
+Extend class User
+```
+
+```bash
+pip install django-countries
+```
+

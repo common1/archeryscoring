@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "archery_materials",
     "fill_db",
     "utils",
+    "django_countries",
 ]
 
 MIDDLEWARE = [
