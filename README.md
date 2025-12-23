@@ -331,6 +331,8 @@ users.admin.py
 class UserAdmin
 users.models.py
 Extend class User
+Part 2
+Reset database
 ```
 
 ```bash
