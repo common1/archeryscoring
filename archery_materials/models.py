@@ -4,11 +4,12 @@ from django.utils import timezone
 from django_extensions.db.fields import AutoSlugField
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from users.models import User
 from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from modeling.models import Archer
+
+from userauth.models import CustomUser 
 
 class ArcheryMaterialsBaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -51,7 +52,7 @@ class BowType(ArcheryMaterialsBaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='bowtype_author',
@@ -103,7 +104,7 @@ class BowTypeMembership(ArcheryMaterialsBaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='bowtype_membership_author',

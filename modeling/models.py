@@ -4,11 +4,12 @@ from django.utils import timezone
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
-from users.models import User
 from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from wagtail.models import Page
+
+from userauth.models import CustomUser
 
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -65,7 +66,7 @@ class Archer(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         verbose_name=_("Author"),
@@ -199,7 +200,7 @@ class Discipline(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='discipline_author',
@@ -248,7 +249,7 @@ class DisciplineMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='discipline_membership_author',
@@ -322,7 +323,7 @@ class Club(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='author_club',
@@ -427,7 +428,7 @@ class ClubMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='membership_author',
@@ -484,7 +485,7 @@ class Category(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         verbose_name=_("Author"),
@@ -524,7 +525,7 @@ class AgeGroup(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='agegroup_author',
@@ -586,7 +587,7 @@ class CategoryMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='category_membership_author',
@@ -638,7 +639,7 @@ class Team(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='team_author',
@@ -693,7 +694,7 @@ class TeamMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='teammembership',
@@ -759,7 +760,7 @@ class ScoringSheet(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='scoringsheet_author',
@@ -865,7 +866,7 @@ class TargetFaceNameChoice(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='targetface_namechoice_author',
@@ -908,7 +909,7 @@ class TargetFace(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='targetface_author',
@@ -994,7 +995,7 @@ class Round(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='author_round',
@@ -1047,7 +1048,7 @@ class RoundMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='author_round_membership',
@@ -1109,7 +1110,7 @@ class Score(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='score_author',
@@ -1182,7 +1183,7 @@ class Competition(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='author_competition',
@@ -1234,7 +1235,7 @@ class CompetitionMembership(BaseModel):
         help_text=_("format: not required"),
     )
     author = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.PROTECT,
         default=1,
         related_name='competition_membership_author',

@@ -26,6 +26,7 @@ BASE_DIR = PROJECT_DIR.parent
 INSTALLED_APPS = [
     "home",
     "search",
+    "userauth",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -50,7 +51,6 @@ INSTALLED_APPS = [
     # Wagtail extensions
     "wagtail_modeladmin",
     # Extensions
-    "users",
     "api",
     "modeling",
     "grid",
@@ -193,5 +193,5 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'userauth.CustomUser'
 

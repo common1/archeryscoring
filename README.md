@@ -338,4 +338,12 @@ Reset database
 ```bash
 pip install django-countries
 ```
+## Chapter 026 - Create userauth app
+
+```
+```
+
+```bash
+python manage.py startapp userauth
+```
 

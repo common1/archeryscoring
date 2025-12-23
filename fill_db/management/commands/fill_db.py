@@ -3,8 +3,9 @@ from decimal import Decimal
 from lorem_text import lorem
 
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
-from users.models import User
+# from django.contrib.auth.models import User
+# from users.models import User
+from userauth.models import CustomUser
 from django.utils import lorem_ipsum
 
 from modeling.models import (
@@ -41,9 +42,9 @@ class Command(BaseCommand):
         super().__init__(*args, **kwargs)
         
         # get or create superuser
-        self.user = User.objects.filter(username='admin').first()
+        self.user = CustomUser.objects.filter(username='admin').first()
         if not self.user:
-            self.user = User.objects.create_superuser(username='admin', password='changeme', email='me@mail.com')
+            self.user = CustomUser.objects.create_superuser(username='admin', password='changeme', email='me@mail.com')
         if SCREEN_OUTPUT:
             self.stdout.write(self.style.SUCCESS('Superuser "admin" ensured.'))
         
