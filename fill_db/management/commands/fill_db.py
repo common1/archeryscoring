@@ -44,7 +44,12 @@ class Command(BaseCommand):
         # get or create superuser
         self.user = CustomUser.objects.filter(username='admin').first()
         if not self.user:
-            self.user = CustomUser.objects.create_superuser(username='admin', password='changeme', email='me@mail.com')
+            self.user = CustomUser.objects.create_superuser(
+                username='admin',
+                display_name='Admin User',
+                password='changeme', 
+                email='me@mail.com'
+            )
         if SCREEN_OUTPUT:
             self.stdout.write(self.style.SUCCESS('Superuser "admin" ensured.'))
         

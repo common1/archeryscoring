@@ -341,9 +341,38 @@ pip install django-countries
 ## Chapter 026 - Create userauth app
 
 ```
+Part 1
+useraut app with standard  fields
+Part 2
+userauth.models.CustomUser
+Extra fields added 
+userauth.admin.CustomUserAdmin
+Add extra fields to add_fieldset and fieldsets
+Visible in django-admin
+Not visible wagtail admin
+A
 ```
 
 ```bash
 python manage.py startapp userauth
+...
+python manage.py makemigrations
+python manage.py migrate
 ```
 
+```bash
+# Windows
+del db.sqlite3
+# Linux
+rm db.sqlite3
+pyclean .
+python manage.py makemigrations
+python manage.py migrate
+python manage.py fill_db
+python manage.py runserver
+# or
+python manage.py runserver 8000
+# or
+python manage.py runserver 8001
+# etc
+```

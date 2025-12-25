@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm  # new
+from django.contrib.auth.forms import AdminUserCreationForm, UserChangeForm, UserCreationForm  # new
 from .models import CustomUser
-
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -10,7 +9,9 @@ class CustomUserAdmin(UserAdmin):
     form = UserChangeForm
     model = CustomUser
     list_display = ['username', 'email', 'first_name', 'last_name']
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {'fields': ('email', 'first_name', 'last_name',)}),
+    # add_fieldsets = UserAdmin.add_fieldsets + (
+    #     ("Custom", {'fields': ('display_name', 'date_of_birth', 'address1', 'address2', 'zip_code', 'city', 'country', 'mobile_phone', 'additional_information', 'photo',)}),
+    # )
+    fieldsets = UserAdmin.fieldsets + (
+        ("Custom", {'fields': ('display_name', 'date_of_birth', 'address1', 'address2', 'zip_code', 'city', 'country', 'mobile_phone', 'additional_information', 'photo',)}),
     )
-    fieldsets = UserAdmin.fieldsets

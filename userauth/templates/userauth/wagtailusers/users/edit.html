@@ -1,0 +1,14 @@
+{% extends "wagtailusers/users/edit.html" %}
+
+{% block extra_fields %}
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.display_name %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.date_of_birth %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.address1 %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.address2 %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.zip_code %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.city %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.country %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.mobile_phone %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.additional_information %}</li>
+    <li>{% include "wagtailadmin/shared/field.html" with field=form.photo %}</li>
+{% endblock extra_fields %}
