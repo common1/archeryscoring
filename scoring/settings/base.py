@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "fill_db",
     "utils",
     "django_countries",
+    "widget_tweaks",
     # allauth
     "allauth",
     "allauth.account",

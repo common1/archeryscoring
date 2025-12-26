@@ -387,3 +387,14 @@ python manage.py runserver 8001
  pip3 install django-allauth
  ```
 
+## Chapter 028 Setting up validated login with allauth in Django
+
+[https://simpleisbetterthancomplex.com/article/2017/08/19/how-to-render-django-form-manually.html]
+
+```
+```
+
+```bash
+pip install django-widget-tweaks
+```
+
