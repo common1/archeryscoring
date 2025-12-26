@@ -15,6 +15,10 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
 ]
 
+urlpatterns = urlpatterns + [
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('userauth.urls')),
+]
 
 if settings.DEBUG:
     from django.conf.urls.static import static

@@ -376,3 +376,14 @@ python manage.py runserver 8000
 python manage.py runserver 8001
 # etc
 ```
+ ## Chaoter 027 Setting up allauth in Django
+
+[https://pythoneatstail.com/en/overview-all-articles/set-allauth-django-project/]
+
+ ```
+ ```
+
+ ```bash
+ pip3 install django-allauth
+ ```
+
