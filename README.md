@@ -398,3 +398,18 @@ python manage.py runserver 8001
 pip install django-widget-tweaks
 ```
 
+## 029 Signup and password reset with allauth's email verification in Django
+
+[https://docs.djangoproject.com/en/5.2/topics/email/#smtp-backend]
+
+```
+Email: another1@ubuntuserver.com
+Display name: another1
+Password: abcd@1234
+First name: Another
+Last name: One
+```
+
+```bash
+```
+
