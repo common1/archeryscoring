@@ -414,3 +414,13 @@ Last name: One
 ```bash
 ```
 
+## Chapter 030 Allowing users to update and delete their profile
+
+[https://pythoneatstail.com/en/overview-all-articles/allowing-users-update-and-delete-their-profile/]
+
+```
+```
+
+```bash
+```
+

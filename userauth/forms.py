@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from wagtail.users.forms import UserCreationForm, UserEditForm
+from django.forms import ModelForm
 
 from .models import CustomUser
 
@@ -26,3 +27,10 @@ class SignupForm(forms.Form):
         user.last_name = self.cleaned_data['last_name']
         user.display_name = self.cleaned_data['display_name']
         user.save()
+
+
+class CustomUserUpdateForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'display_name', 'date_of_birth', 'address1', 'address2', 'zip_code', 'city', 'country', 'mobile_phone', 'additional_information', 'photo',]
+        widgets = {'date_of_birth': forms.DateInput(attrs={'type':'date'})}
