@@ -434,3 +434,10 @@ python manage.py migrate
 python manage.py fill_db
 ```
 
+## Chapter 032 Django REST Framework modeling app
+
+```bash
+# Part 1
+# modeling.serializers.py
+```
+
