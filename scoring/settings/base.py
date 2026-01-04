@@ -235,4 +235,3 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'userauth.forms.SignupForm'
-

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django import forms
 from .models import (
@@ -26,7 +27,6 @@ from wagtail.snippets.models import register_snippet
 from wagtail.admin.ui.tables import BooleanColumn
 from wagtail.admin.panels import MultiFieldPanel, FieldPanel, FieldRowPanel
 
-
 @admin.action(description="Activate selected Archers")
 def activate_archers(modeladmin, request, queryset):
     queryset.update(is_active=True)
@@ -38,7 +38,8 @@ def deactivate_archers(modeladmin, request, queryset):
 @admin.register(Archer)
 class ArcherAdmin(admin.ModelAdmin):
     actions=[activate_archers, deactivate_archers]
-    list_display = ('last_name', 'first_name', 'middle_name', 'union_number', 'is_active',)
+    list_display = ('last_name', 'first_name', 'middle_name', 'union_number', 'is_active')
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('last_name', 'first_name')
     list_per_page = 20
@@ -74,10 +75,12 @@ def deactivate_agegroups(modeladmin, request, queryset):
 class AgeGroupAdmin(admin.ModelAdmin):
     actions=[activate_agegroups, deactivate_agegroups]
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
     ordering = ('name',)
+    # list_editable = ('is_active',)
     fieldsets = (
         (None, {
             'fields': ('name', 'info',)
@@ -118,10 +121,12 @@ class ClubAdmin(admin.ModelAdmin):
         ClubMembershipInline
     ]
     list_display = ('name', 'town', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name', 'town')
     list_per_page = 20
     ordering = ('name',)
+    # list_editable = ('is_active',)
     fieldsets = (
         (None, {
             'fields': ('name', 'info')
@@ -161,7 +166,8 @@ def deactivate_clubmemberships(modeladmin, request, queryset):
 class ClubMembershipAdmin(admin.ModelAdmin):
     actions=[activate_clubmemberships, deactivate_clubmemberships]
     list_display = ('archer', 'club', 'start_date', 'end_date', 'is_active')
-    list_filter = ('is_active',)
+    list_editable = ('is_active',)
+    list_filter = ('is_active', 'archer',)
     list_display_links = ('archer',)
     list_per_page = 20
     ordering = ('club', 'archer',)
@@ -207,6 +213,7 @@ class CategoryAdmin(admin.ModelAdmin):
         CategoryMembershipInline
     ]
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -241,7 +248,8 @@ def deactivate_category_memberships(modeladmin, request, queryset):
 class CategoryMembershipAdmin(admin.ModelAdmin):
     actions=[activate_category_memberships, deactivate_category_memberships]
     list_display = ('category', 'archer', 'agegroup', 'is_active',)
-    list_filter = ('is_active',)
+    list_editable = ('is_active',)
+    list_filter = ('is_active', 'archer',)
     list_display_links = ('category', 'archer',)
     list_per_page = 20
     ordering = ('category', 'archer')
@@ -287,6 +295,7 @@ class DisciplineAdmin(admin.ModelAdmin):
         DisciplineMembershipInline
     ]
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -321,7 +330,8 @@ def deactivate_discipline_memberships(modeladmin, request, queryset):
 class DisciplineMembershipAdmin(admin.ModelAdmin):
     actions=[activate_discipline_memberships, deactivate_discipline_memberships]
     list_display = ('discipline', 'archer', 'is_active',)
-    list_filter = ('is_active',)
+    list_editable = ('is_active',)
+    list_filter = ('discipline', 'archer', 'is_active',)
     list_display_links = ('discipline', 'archer',)
     list_per_page = 20
     ordering = ('discipline', 'archer',)
@@ -367,6 +377,7 @@ class TeamAdmin(admin.ModelAdmin):
         TeamMembershipInline
     ]
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -398,6 +409,7 @@ def deactivate_team_memberships(modeladmin, request, queryset):
 class TeamMembershipAdmin(admin.ModelAdmin):
     actions=[activate_team_memberships, deactivate_team_memberships]
     list_display = ('team', 'archer', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('team', 'archer',)
     list_per_page = 20
@@ -429,6 +441,7 @@ def deactivate_scoring_sheets(modeladmin, request, queryset):
 class ScoringSheetAdmin(admin.ModelAdmin):
     actions=[activate_scoring_sheets, deactivate_scoring_sheets]
     list_display = ('name', 'columns', 'rows', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -481,6 +494,7 @@ class TargetFaceNameChoiceAdminForm(forms.ModelForm):
 class TargetFaceNameChoiceAdmin(admin.ModelAdmin):
     form = TargetFaceNameChoiceAdminForm
     list_display=('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter=('is_active',)
     list_display_links=('name',)
     list_per_page=20
@@ -533,6 +547,7 @@ class TargetFaceAdminForm(forms.ModelForm):
 class TargetFaceAdmin(admin.ModelAdmin):
     form=TargetFaceAdminForm
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -591,6 +606,7 @@ class RoundAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'start_date', 'start_time', 'end_date', 'end_time', 'is_active',
     )
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -622,6 +638,7 @@ def deactivate_round_memberships(modeladmin, request, queryset):
 class RoundMembershipAdmin(admin.ModelAdmin):
     actions=[activate_round_memberships, deactivate_round_memberships]
     list_display = ('round', 'archer', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('round', 'archer',)
     list_per_page = 20
@@ -644,10 +661,16 @@ class RoundMembershipAdmin(admin.ModelAdmin):
 @admin.register(Score)
 class ScoreAdmin(admin.ModelAdmin):
     def round_name(self, obj):
-        return obj.round_archer.round.name
+        if obj.round_archer:
+            return obj.round_archer.round.name
+        else:
+            return "No Round"
     
     def archer_name(self, obj):
-        return obj.round_archer.archer
+        if obj.round_archer:
+            return obj.round_archer.archer
+        else:
+            return "No Archer"
     
     list_display = (
         'archer_name',
@@ -658,7 +681,7 @@ class ScoreAdmin(admin.ModelAdmin):
     # list_display_links = ('score',)
     list_editable = ('score',)
     list_per_page = 20
-    list_filter = ('is_active', 'round_archer__round__name',)
+    list_filter = ('is_active', 'round_archer__round',)
     fieldsets = (
         (None, {
             'fields': (
@@ -670,7 +693,6 @@ class ScoreAdmin(admin.ModelAdmin):
         ('Extra Information', {
             'classes': ['collapse'],
             'fields': (
-                'slug', 
                 'author',
                 'info', 
             ),
@@ -704,6 +726,7 @@ class CompetitionAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'start_date', 'end_date', 'is_active',
     )
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -735,6 +758,7 @@ def deactivate_competition_memberships(modeladmin, request, queryset):
 class CompetitionMembershipAdmin(admin.ModelAdmin):
     actions=[activate_competition_memberships, deactivate_competition_memberships]
     list_display = ('competition', 'round', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('competition', 'round',)
     list_per_page = 20

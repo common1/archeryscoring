@@ -32,6 +32,7 @@ class BowTypeAdmin(admin.ModelAdmin):
         BowTypeMembershipInline
     ]
     list_display = ('name', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('name',)
     list_per_page = 20
@@ -63,6 +64,7 @@ def deactivate_bowtype_memberships(modeladmin, request, queryset):
 class BowTypeMembershipAdmin(admin.ModelAdmin):
     actions=[activate_bowtype_memberships, deactivate_bowtype_memberships]
     list_display = ('bowtype', 'archer', 'is_active',)
+    list_editable = ('is_active',)
     list_filter = ('is_active',)
     list_display_links = ('bowtype', 'archer',)
     list_per_page = 20

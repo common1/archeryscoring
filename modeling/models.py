@@ -1095,13 +1095,6 @@ class Score(BaseModel):
         verbose_name=_("Number of arrows")  ,      
         help_text=_("format: not required"),
     )
-    slug = AutoSlugField(
-        populate_from=(
-            'round_archer__round__name', 
-            'round_archer__archer',
-        ),
-        editable=True
-    )
     info = models.TextField(
         null=True,
         blank=True,
@@ -1123,11 +1116,18 @@ class Score(BaseModel):
         verbose_name = _("Score")
         verbose_name_plural = _("Scores")
 
+    # TODO: 119
     def __str__(self):
-        return f"{str(self.score)} - {str(self.round_archer.archer)}"
+        if self.round_archer:
+            return f"{str(self.score)} - {str(self.round_archer.archer)}"
+        else:
+            return f"{str(self.score)} - No Archer"
 
     def __unicode__(self):
-        return f"{str(self.score)} - {str(self.round_archer.archer)}"
+        if self.round_archer:
+            return f"{str(self.score)} - {str(self.round_archer.archer)}"
+        else:
+            return f"{str(self.score)} - No Archer"
 
 # TODO: Can be removed probably
 # class ScoreMembership(BaseModel):

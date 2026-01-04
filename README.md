@@ -424,3 +424,13 @@ Last name: One
 ```bash
 ```
 
+## Chapter 031 Removing slug from some objects, adjust list_filer in admin
+
+```bash
+del db.sqlite3
+pyclean .
+python manage.py makemigrations
+python manage.py migrate
+python manage.py fill_db
+```
+
