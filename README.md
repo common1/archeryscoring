@@ -441,3 +441,12 @@ python manage.py fill_db
 # modeling.serializers.py
 ```
 
+## Chapter 033 Building AI With Ollama and Django
+
+[https://www.scoutapm.com/blog/building-ai-with-ollama-and-django]
+
+```bash
+Part 1
+# Make sure docker desktop is installed and running
+```
+
