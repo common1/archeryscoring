@@ -1,5 +1,7 @@
 {% extends "wagtailusers/users/edit.html" %}
 
+{% load wagtailcore_tags %} 
+
 {% block extra_fields %}
     <li>{% include "wagtailadmin/shared/field.html" with field=form.display_name %}</li>
     <li>{% include "wagtailadmin/shared/field.html" with field=form.date_of_birth %}</li>

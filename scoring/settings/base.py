@@ -218,20 +218,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_LOGIN_METHODS = {'email'}
-# ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_USERNAME_REQUIRED = False
-
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'yourusername@gmail.com'
-# EMAIL_HOST_PASSWORD = 'yourpassword'
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+MAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'userauth.forms.SignupForm'
